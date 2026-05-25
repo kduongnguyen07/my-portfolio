@@ -1,0 +1,90 @@
+---
+title: 'Áp dụng chia căn và Mo algorithm'
+---
+Codeforces : Powerful Array (Mo algorithm and sqrt decomposition)
+---
+Bài toán sử dụng Mo algorithm
+Tên bài toán Powerful Array ([link](https://codeforces.com/contest/86/problem/D))
+Đề bài : ![image](https://hackmd.io/_uploads/H11fX_Swee.png)
+Phân tích : 
+- Rõ ràng đây là một bài toán sử dụng tìm kiếm tần số xuất hiện của một giá trị trong đoạn [l,r] nên bài này nên sử dụng chia căn để đếm tần số xuất hiện của các giá trị trong đoạn
+- Thêm vào đó vì có số lượng truy vấn lớn nên phải làm sao để trả lời truy vấn offline để có thể tối ưu thời gian : Dựa vào cách là ``Sắp xếp truy vấn  `` bằng cách tận dụng truy vấn trước đó
+- Để dùng sắp xếp truy vấn ta dùng Odd and even trick có mô tả như sau `Vì các truy vấn đều được chia vào các block ` mà các block có giá trị chỉ số block từ 0 cho tới `N/Block_size` nên ta sắp xếp các giá trị của các truy vấn như sau 
+```C++
+bool cmp(query a,query b)
+{
+	if(pos[a.l]!=pos[b.l])return pos[a.l]<pos[b.l];
+	if(pos[a.l]&1)return a.r>b.r;
+	return a.r<b.r;
+}
+```
+Lí giải : Khi chuyển giữa các block thì nếu ta có block chẵn (ví dụ là 0) chuyển sang block lẻ (ví dụ là 1) thì block chẵn tăng dần và block lẻ giảm dần thì số lần chỉnh sửa các truy vấn giữa [l,r] là tối ưu nhất. Nếu 2 truy vấn cùng thuộc 1 block thì ta cố gắng lấy truy vấn được xử lí trước là truy vấn có cận l nhỏ hơn để có thể thêm bổ sung r nếu muốn
+Cài đặt phần xử lí : 
+```C++
+void add(int u)
+{
+	ans-=1ll*u*cnt[u]*cnt[u];
+	cnt[u]++;
+	ans+=1ll*u*cnt[u]*cnt[u];
+}
+void del(int u)
+{
+	ans-=1ll*u*cnt[u]*cnt[u];
+	cnt[u]--;
+	ans+=1ll*u*cnt[u]*cnt[u];
+}
+```
+Từ đó ta có lời giải hoàn thiện cho bài toán như sau : 
+```C++
+#include<bits/stdc++.h>
+using namespace std;
+int a[200010],cnt[1000010],len;
+int pos[200010];
+long long ans,res[200010];
+struct query
+{
+	int l,r,pos;
+}
+q[200010];
+bool cmp(query a,query b)
+{
+	if(pos[a.l]!=pos[b.l])return pos[a.l]<pos[b.l];
+	if(pos[a.l]&1)return a.r>b.r;
+	return a.r<b.r;
+}
+void add(int u)
+{
+	ans-=1ll*u*cnt[u]*cnt[u];
+	cnt[u]++;
+	ans+=1ll*u*cnt[u]*cnt[u];
+}
+void del(int u)
+{
+	ans-=1ll*u*cnt[u]*cnt[u];
+	cnt[u]--;
+	ans+=1ll*u*cnt[u]*cnt[u];
+}
+signed main()
+{
+	ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+	int n,m;
+	cin>>n>>m;
+	len=sqrt(n);
+	for(int i=1;i<=n;i++)pos[i]=(i-1)/len;
+	for(int i=1;i<=n;i++)cin>>a[i];
+	for(int i=1;i<=m;i++)cin>>q[i].l>>q[i].r,q[i].pos=i;
+	sort(q+1,q+1+m,cmp);
+	int l=1,r=0;
+	for(int i=1;i<=m;i++)
+	{
+		while(l<q[i].l)del(a[l++]);
+		while(l>q[i].l)add(a[--l]);
+		while(r>q[i].r)del(a[r--]);
+		while(r<q[i].r)add(a[++r]);
+		res[q[i].pos]=ans;
+	}
+	for(int i=1;i<=m;i++)cout<<res[i]<<'\n';
+	return 0;
+}
+
+```
