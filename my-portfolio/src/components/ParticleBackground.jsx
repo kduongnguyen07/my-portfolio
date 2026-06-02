@@ -35,7 +35,7 @@ export default function ParticleBackground() {
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(255, 245, 247, 0.65)', // Very soft translucent sakura pink
+        backgroundColor: 'rgba(255, 245, 247, 0.40)', // Very soft translucent sakura pink (40% opacity)
         backdropFilter: 'blur(20px) saturate(140%)', // Bokeh blur effect
         WebkitBackdropFilter: 'blur(20px) saturate(140%)'
       }} />
