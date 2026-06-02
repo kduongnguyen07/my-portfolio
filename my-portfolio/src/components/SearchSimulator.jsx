@@ -134,7 +134,7 @@ export default function SearchSimulator() {
                   background: 'transparent',
                   border: 'none',
                   outline: 'none',
-                  color: 'var(--text-primary)',
+                  color: '#f472b6',
                   fontFamily: 'monospace',
                   fontSize: '0.9rem'
                 }}
