@@ -28,6 +28,7 @@ export default function TransitionScreen({ isTriggered, onMidway }) {
 
       // Trigger the tab change (onMidway) in the middle of the video.
       // A standard transition video peak is around 350-450ms.
+      // This gives the browser 400ms to pre-render the new tab in the background.
       const midwayTimer = setTimeout(() => {
         if (onMidway) onMidway();
       }, 400);
@@ -49,10 +50,10 @@ export default function TransitionScreen({ isTriggered, onMidway }) {
     // Start sliding out to the left
     setIsSlidingOut(true);
     
-    // Wait for the slide transition to complete (600ms) before unmounting
+    // Wait for the slide transition to complete (800ms) before unmounting
     slideTimerRef.current = setTimeout(() => {
       setShouldRender(false);
-    }, 600);
+    }, 800);
   };
 
   if (!shouldRender) return null;
@@ -72,8 +73,14 @@ export default function TransitionScreen({ isTriggered, onMidway }) {
         justifyContent: 'center',
         overflow: 'hidden',
         pointerEvents: 'all',
-        transform: isSlidingOut ? 'translateX(-100%)' : 'translateX(0)',
-        transition: 'transform 0.6s cubic-bezier(0.85, 0, 0.15, 1)' // PowerPoint-style smooth push/slide ease
+        transform: isSlidingOut ? 'translate3d(-100vw, 0, 0)' : 'translate3d(0, 0, 0)',
+        // GPU accelerated transform combined with a neon trailing glow border
+        borderRight: isSlidingOut ? '5px solid #00f0ff' : '0px solid transparent',
+        boxShadow: isSlidingOut 
+          ? '-10px 0 35px rgba(0, 240, 255, 0.6), -25px 0 70px rgba(255, 0, 240, 0.4)' 
+          : 'none',
+        // Ease-out-expo transition: starts rapidly to feel responsive, ends with an elegant decay
+        transition: 'transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), border 0.3s ease, box-shadow 0.3s ease'
       }}
     >
       <video
