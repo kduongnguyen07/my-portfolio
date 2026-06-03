@@ -2,11 +2,17 @@ import React, { useEffect, useState, useRef } from 'react';
 
 export default function TransitionScreen({ isTriggered, onMidway }) {
   const [shouldRender, setShouldRender] = useState(false);
+  const [isSlidingOut, setIsSlidingOut] = useState(false);
   const videoRef = useRef(null);
+  const slideTimerRef = useRef(null);
 
   useEffect(() => {
     if (isTriggered) {
+      // Clear any active timers if triggered again
+      clearTimeout(slideTimerRef.current);
+      
       setShouldRender(true);
+      setIsSlidingOut(false);
       
       // Let React mount the video element, then play it
       const timer = setTimeout(() => {
@@ -33,8 +39,20 @@ export default function TransitionScreen({ isTriggered, onMidway }) {
     }
   }, [isTriggered, onMidway]);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(slideTimerRef.current);
+    };
+  }, []);
+
   const handleVideoEnded = () => {
-    setShouldRender(false);
+    // Start sliding out to the left
+    setIsSlidingOut(true);
+    
+    // Wait for the slide transition to complete (600ms) before unmounting
+    slideTimerRef.current = setTimeout(() => {
+      setShouldRender(false);
+    }, 600);
   };
 
   if (!shouldRender) return null;
@@ -53,7 +71,9 @@ export default function TransitionScreen({ isTriggered, onMidway }) {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        pointerEvents: 'all'
+        pointerEvents: 'all',
+        transform: isSlidingOut ? 'translateX(-100%)' : 'translateX(0)',
+        transition: 'transform 0.6s cubic-bezier(0.85, 0, 0.15, 1)' // PowerPoint-style smooth push/slide ease
       }}
     >
       <video
