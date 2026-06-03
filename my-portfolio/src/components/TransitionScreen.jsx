@@ -1,41 +1,44 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 export default function TransitionScreen({ isTriggered, onMidway }) {
-  const [shouldRender, setShouldRender] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
+  const [enableTransition, setEnableTransition] = useState(false);
   const videoRef = useRef(null);
   const slideTimerRef = useRef(null);
 
   useEffect(() => {
     if (isTriggered) {
-      // Clear any active timers if triggered again
+      // Clear any active slide-out timers
       clearTimeout(slideTimerRef.current);
       
-      setShouldRender(true);
+      // Snap transition overlay back to center instantly without animation
+      setEnableTransition(false);
       setIsSlidingOut(false);
+      setIsVisible(true);
       
-      // Let React mount the video element, then play it
-      const timer = setTimeout(() => {
-        const video = videoRef.current;
-        if (video) {
-          video.currentTime = 0;
-          video.load();
-          video.play().catch(err => {
-            console.warn("Transition video play blocked:", err);
-          });
-        }
-      }, 30);
+      // Play the preloaded video immediately
+      const video = videoRef.current;
+      if (video) {
+        video.currentTime = 0;
+        video.play().catch(err => {
+          console.warn("Transition video playback failed or interrupted:", err);
+        });
+      }
 
-      // Trigger the tab change (onMidway) in the middle of the video.
-      // A standard transition video peak is around 350-450ms.
-      // This gives the browser 400ms to pre-render the new tab in the background.
+      // Trigger the tab change in the background at 400ms peak
       const midwayTimer = setTimeout(() => {
         if (onMidway) onMidway();
       }, 400);
 
+      // Re-enable transition animations after the snap frame has completed
+      const enableTimer = setTimeout(() => {
+        setEnableTransition(true);
+      }, 80);
+
       return () => {
-        clearTimeout(timer);
         clearTimeout(midwayTimer);
+        clearTimeout(enableTimer);
       };
     }
   }, [isTriggered, onMidway]);
@@ -50,13 +53,11 @@ export default function TransitionScreen({ isTriggered, onMidway }) {
     // Start sliding out to the left
     setIsSlidingOut(true);
     
-    // Wait for the slide transition to complete (800ms) before unmounting
+    // Wait for the slide transition to complete (800ms) before hiding
     slideTimerRef.current = setTimeout(() => {
-      setShouldRender(false);
+      setIsVisible(false);
     }, 800);
   };
-
-  if (!shouldRender) return null;
 
   return (
     <div 
@@ -72,15 +73,15 @@ export default function TransitionScreen({ isTriggered, onMidway }) {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        pointerEvents: 'all',
+        visibility: isVisible ? 'visible' : 'hidden',
+        pointerEvents: isVisible ? 'all' : 'none',
         transform: isSlidingOut ? 'translate3d(-100vw, 0, 0)' : 'translate3d(0, 0, 0)',
-        // GPU accelerated transform combined with a neon trailing glow border
         borderRight: isSlidingOut ? '5px solid #00f0ff' : '0px solid transparent',
         boxShadow: isSlidingOut 
           ? '-10px 0 35px rgba(0, 240, 255, 0.6), -25px 0 70px rgba(255, 0, 240, 0.4)' 
           : 'none',
-        // Ease-out-expo transition: starts rapidly to feel responsive, ends with an elegant decay
-        transition: 'transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), border 0.3s ease, box-shadow 0.3s ease'
+        transition: enableTransition ? 'transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), border 0.3s ease, box-shadow 0.3s ease' : 'none',
+        willChange: 'transform'
       }}
     >
       <video
@@ -88,10 +89,12 @@ export default function TransitionScreen({ isTriggered, onMidway }) {
         src="./transition.mp4"
         playsInline
         muted
+        preload="auto" // Preload immediately on page load
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'cover'
+          objectFit: 'cover',
+          willChange: 'transform'
         }}
         onEnded={handleVideoEnded}
       />
