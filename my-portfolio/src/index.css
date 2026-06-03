@@ -207,6 +207,35 @@ html, body {
   width: 100%;
   margin: 0 auto;
   padding: 2rem 2rem 5rem 2rem;
+  transition: all var(--transition-normal);
+}
+
+/* Glass panel wrapper for subpages to reduce background glare and improve text contrast */
+.content-glass-panel {
+  background: rgba(4, 2, 16, 0.82); /* Deep dark purple-indigo frosted backdrop */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(0, 240, 255, 0.25); /* Cyan border */
+  border-radius: 12px;
+  box-shadow: 
+    0 24px 70px rgba(0, 0, 0, 0.95), 
+    0 0 40px rgba(0, 240, 255, 0.08), 
+    inset 0 0 35px rgba(255, 0, 240, 0.03);
+  margin: 2rem auto 5rem auto !important;
+  position: relative;
+}
+
+/* Glass panel glow sweep line */
+.content-glass-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.12) 0%, transparent 40%) border-box;
+  pointer-events: none;
+  border-radius: 11px;
 }
 
 /* TFT Styling Elements */
@@ -815,6 +844,12 @@ html, body {
   }
   .main-content {
     padding: 1.5rem 1rem;
+  }
+  .content-glass-panel {
+    margin: 1rem auto 3rem auto !important;
+    width: calc(100% - 2rem) !important;
+    border-radius: 8px;
+    padding: 1.25rem 1rem 3rem 1rem !important;
   }
   .doc-title {
     font-size: 1.8rem;

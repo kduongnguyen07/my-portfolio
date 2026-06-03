@@ -299,8 +299,8 @@ function App() {
 
       {/* 4. Scrollable Main Content Area */}
       <div className="content-area">
-        <main className="main-content">
-          {activeTab !== 'home' && (
+        <main className={`main-content ${activeTab !== 'home' ? 'content-glass-panel' : ''}`}>
+          {activeTab !== 'home' && activeTab !== 'profile' && activeTab !== 'warp' && (
             <div style={{ 
               marginBottom: '2rem', 
               display: 'flex', 
