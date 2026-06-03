@@ -1,61 +1,176 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-export default function ParticleBackground() {
-  const imageUrl = "https://images.unsplash.com/photo-1522383225653-ed111181a951?q=80&w=1176&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+export default function ParticleBackground({ isHome }) {
+  const canvasRef = useRef(null);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.load();
+      // Ensure the video plays and handle any autoplay blockages
+      video.play().catch(err => {
+        console.warn("Autoplay audio/video block prevented background video immediate start:", err);
+      });
+    }
+  }, [isHome]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+
+    // Responsive sizing
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    // Glitchy Binary / Cyber Pixel class
+    class CyberParticle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + Math.random() * 50; // start below screen
+        this.size = Math.random() * 10 + 8; // font size for characters
+        this.speedY = Math.random() * 0.8 + 0.3; // speed floating up
+        this.char = Math.random() > 0.5 ? '0' : '1';
+        
+        // Alternate cyan and neon pink
+        const isPink = Math.random() > 0.6;
+        this.color = isPink ? '255, 0, 240' : '0, 240, 255'; 
+        this.opacity = Math.random() * 0.35 + 0.15;
+        this.maxLife = Math.random() * 800 + 400;
+        this.life = 0;
+        this.glitchTimer = 0;
+      }
+
+      update() {
+        this.y -= this.speedY;
+        this.life += 1;
+        this.glitchTimer += 1;
+
+        // Occasionally flip character
+        if (this.glitchTimer > 40) {
+          this.char = Math.random() > 0.5 ? '0' : '1';
+          this.glitchTimer = 0;
+        }
+
+        // Reset if goes off screen or dies
+        if (this.y < 0 || this.life >= this.maxLife) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.font = `${this.size}px 'Share Tech Mono', monospace`;
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity * (1 - this.y / canvas.height)})`;
+        
+        // Glow effect
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = `rgba(${this.color}, 0.8)`;
+        
+        ctx.fillText(this.char, this.x, this.y);
+        ctx.restore();
+      }
+    }
+
+    // Initialize particles
+    const particleCount = Math.min(45, Math.floor((canvas.width * canvas.height) / 40000));
+    const particles = Array.from({ length: particleCount }, () => new CyberParticle());
+
+    // Cyberpunk grid
+    const drawGrid = () => {
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.02)';
+      ctx.lineWidth = 1;
+      const gridSize = 100;
+
+      // Vertical lines
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      // Horizontal lines
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+    };
+
+    // Render loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw faint cyber grid
+      drawGrid();
+
+      // Update and draw particles
+      particles.forEach((p) => {
+        p.update();
+        p.draw();
+      });
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
 
   return (
-    <div className="bg-glow-container" style={{
+    <div style={{
       position: 'fixed',
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      overflow: 'hidden',
       zIndex: 0,
-      backgroundColor: '#fff5f7',
-      pointerEvents: 'none'
+      pointerEvents: 'none',
+      background: '#04020d' // fallback background color
     }}>
-      {/* 1. Base Sakura Background Image */}
+      <video
+        ref={videoRef}
+        src={isHome ? "./main-background.mp4" : "./background.mp4"}
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover'
+        }}
+      />
+
+      {/* Futuristic color grading overlay */}
       <div style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundImage: `url("${imageUrl}")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        inset: 0,
+        background: 'radial-gradient(circle, rgba(16, 4, 40, 0.3) 0%, rgba(4, 2, 16, 0.9) 100%)',
+        mixBlendMode: 'multiply'
       }} />
 
-      {/* 2. Soft Dreamy Glassmorphic Overlay Layer */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(255, 245, 247, 0.40)', // Very soft translucent sakura pink (40% opacity)
-        backdropFilter: 'blur(20px) saturate(140%)', // Bokeh blur effect
-        WebkitBackdropFilter: 'blur(20px) saturate(140%)'
-      }} />
-
-      {/* 3. Subtle Grid overlay on top of the glass */}
-      <div className="bg-glow-grid" style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundImage: `
-          linear-gradient(rgba(219, 39, 119, 0.02) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(219, 39, 119, 0.02) 1px, transparent 1px)
-        `,
-        backgroundSize: '50px 50px',
-        WebkitMaskImage: 'radial-gradient(ellipse at 50% 50%, black 60%, transparent 100%)',
-        maskImage: 'radial-gradient(ellipse at 50% 50%, black 60%, transparent 100%)',
-        opacity: 0.8
-      }} />
+      {/* Cyber Canvas for binary glitch code */}
+      <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%', position: 'absolute', inset: 0 }} />
     </div>
   );
 }
