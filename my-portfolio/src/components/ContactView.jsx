@@ -165,7 +165,7 @@ export default function ContactView() {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <Mail size={20} />
-                  <span>khanh.duong@uet.vnu.edu.vn</span>
+                  <span>kduongnguyen07@gmail.com</span>
                 </div>
               </div>
             </div>
@@ -185,7 +185,7 @@ export default function ContactView() {
                 <div>
                   <div style={{ fontWeight: 800, fontSize: '0.9rem' }}>Làm thế nào để liên hệ trực tiếp?</div>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.15rem', lineHeight: '1.3' }}>
-                    Bạn có thể điền thông tin vào mẫu đăng ký đề xuất bên cạnh hoặc gửi thư điện tử trực tiếp đến địa chỉ khanh.duong@uet.vnu.edu.vn.
+                    Bạn có thể điền thông tin vào mẫu đăng ký đề xuất bên cạnh hoặc gửi thư điện tử trực tiếp đến địa chỉ kduongnguyen07@gmail.com.
                   </p>
                 </div>
               </div>
