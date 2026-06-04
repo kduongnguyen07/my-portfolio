@@ -1,0 +1,973 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Chakra+Petch:wght@300;400;500;600;700;900&family=Orbitron:wght@500;700;900&family=VT323&family=Share+Tech+Mono&family=Cinzel:wght@600;700;900&display=swap');
+
+/* HSR Silver Wolf Cyberpunk Theme */
+:root {
+  --font-sans: 'Chakra Petch', sans-serif;
+  --font-display: 'Chakra Petch', sans-serif;
+  --font-mono: 'Chakra Petch', sans-serif;
+  --font-hacker: 'VT323', monospace;
+
+
+  /* Color Palette */
+  --bg-primary: #04020d; /* Ultra Dark Indigo */
+  --bg-secondary: rgba(10, 4, 28, 0.7); /* Frosted Dark Purple */
+  --bg-tertiary: rgba(24, 12, 58, 0.85); /* Lighter indigo for inputs */
+  
+  /* Accent Colors - Silver Wolf Theme */
+  --accent-gold: #00f0ff; /* Quantum Neon Cyan */
+  --accent-gold-glow: rgba(0, 240, 255, 0.5);
+  --accent-blue: #ff00f0; /* Hacker Bubblegum Pink/Purple */
+  --accent-cyan-glow: rgba(255, 0, 240, 0.5);
+  --accent-red: #ff3b30; /* System Warning Red */
+  
+  /* Rarity Colors */
+  --tier-1: #94a3b8; /* Slate - Common */
+  --tier-2: #10b981; /* Emerald - Uncommon */
+  --tier-3: #00d2ff; /* Sky Blue - Rare */
+  --tier-4: #d946ef; /* Magenta - Epic */
+  --tier-5: #ff00ff; /* Pink Neon - Legendary */
+  
+  /* HSR Element Paths */
+  --path-nihility: #8b5cf6;
+  --path-erudition: #06b6d4;
+  --path-harmony: #f43f5e;
+  --path-prismatic: linear-gradient(135deg, #00f0ff, #ff00ff, #ffffff);
+
+  /* Fonts & Borders */
+  --text-primary: #ffffff; 
+  --text-secondary: #cbd5e1; /* Light Slate */
+  --text-muted: #64748b;
+  --border-color: rgba(0, 240, 255, 0.25); /* Cyan border */
+  --border-focus: #ff00f0;
+  
+  --transition-fast: 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+  --transition-normal: 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  --transition-slow: 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+
+  --glass-bg: rgba(6, 3, 20, 0.65);
+  --glass-border: rgba(0, 240, 255, 0.25);
+  --glass-shadow: 0 16px 48px 0 rgba(0, 0, 0, 0.7);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar - TFT Gold and Black */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #02040a;
+  border-left: 1px solid rgba(200, 155, 60, 0.1);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-gold);
+  border-radius: 4px;
+  border: 2px solid #02040a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f0e6d2;
+}
+
+/* Layout Utilities */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* TFT Client Sidebar */
+.sidebar {
+  width: 80px;
+  background: rgba(3, 6, 17, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-right: 2px solid var(--accent-gold);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 90;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar:hover {
+  width: 260px;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.sidebar-header {
+  padding: 1.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(200, 155, 60, 0.2);
+  height: 80px;
+}
+
+.sidebar-logo-text, .sidebar-text, .sidebar-footer-content {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+.sidebar:hover .sidebar-logo-text,
+.sidebar:hover .sidebar-text,
+.sidebar:hover .sidebar-footer-content {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-menu {
+  flex: 1;
+  padding: 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-left: 3px solid transparent;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sidebar-item:hover {
+  color: var(--text-primary);
+  background: rgba(0, 240, 255, 0.06);
+  border-left-color: rgba(0, 240, 255, 0.4);
+}
+
+.sidebar-item.active {
+  color: var(--accent-gold);
+  background: rgba(0, 240, 255, 0.12);
+  border-left-color: var(--accent-gold);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+.sidebar-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(0, 240, 255, 0.15);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Content Area */
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 2rem 5rem 2rem;
+  transition: all var(--transition-normal);
+}
+
+/* Glass panel wrapper for subpages to reduce background glare and improve text contrast */
+.content-glass-panel {
+  background: rgba(4, 2, 16, 0.82); /* Deep dark purple-indigo frosted backdrop */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(0, 240, 255, 0.25); /* Cyan border */
+  border-radius: 12px;
+  box-shadow: 
+    0 24px 70px rgba(0, 0, 0, 0.95), 
+    0 0 40px rgba(0, 240, 255, 0.08), 
+    inset 0 0 35px rgba(255, 0, 240, 0.03);
+  margin: 2rem auto 5rem auto !important;
+  position: relative;
+}
+
+/* Glass panel glow sweep line */
+.content-glass-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.12) 0%, transparent 40%) border-box;
+  pointer-events: none;
+  border-radius: 11px;
+}
+
+/* TFT Styling Elements */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  box-shadow: var(--glass-shadow);
+  padding: 1.5rem;
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), transparent 40%) border-box;
+  pointer-events: none;
+}
+
+/* HSR Silver Wolf Hacker Console Frame */
+.challenger-frame {
+  position: relative;
+  border: 2px solid rgba(0, 240, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(8, 4, 30, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 
+    0 0 35px rgba(0, 240, 255, 0.1), 
+    inset 0 0 30px rgba(255, 0, 240, 0.05);
+  padding: 2.2rem;
+  margin-top: 1rem;
+}
+
+/* Digital crosshairs and decorations */
+.challenger-frame::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 1px solid rgba(255, 0, 240, 0.4);
+  border-radius: 10px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* Glowing Quantum Diamond Gems */
+.challenger-gem-top-left,
+.challenger-gem-top-right,
+.challenger-gem-bottom-left,
+.challenger-gem-bottom-right {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--accent-gold);
+  border: 2px solid #fff;
+  transform: rotate(45deg);
+  box-shadow: 0 0 15px var(--accent-gold-glow);
+  z-index: 10;
+  animation: pulse-gem 2s infinite ease-in-out;
+}
+
+.challenger-gem-top-left { top: -6px; left: -6px; }
+.challenger-gem-top-right { top: -6px; right: -6px; }
+.challenger-gem-bottom-left { bottom: -6px; left: -6px; }
+.challenger-gem-bottom-right { bottom: -6px; right: -6px; }
+
+/* Silver Wolf Hacking Banner Crest */
+.challenger-crest {
+  position: absolute;
+  top: -24px;
+  left: 30px;
+  background: linear-gradient(135deg, var(--accent-blue) 0%, #a200a2 100%);
+  border: 1.5px solid var(--accent-gold);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  padding: 0.3rem 1.2rem;
+  border-radius: 4px;
+  box-shadow: 
+    0 4px 15px rgba(255, 0, 240, 0.3),
+    0 0 10px rgba(0, 240, 255, 0.2);
+  text-transform: uppercase;
+  z-index: 10;
+}
+
+/* Neon HUD Wing rails on sides */
+.challenger-wing-left,
+.challenger-wing-right {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 90px;
+  background: linear-gradient(to bottom, transparent, var(--accent-blue), var(--accent-gold), transparent);
+  border-radius: 2px;
+  box-shadow: 0 0 12px var(--accent-blue);
+}
+.challenger-wing-left { left: -3px; transform: translateY(-50%); }
+.challenger-wing-right { right: -3px; transform: translateY(-50%); }
+
+
+/* HSR Gacha Shop Layout & Cards */
+.tft-shop-container {
+  background: rgba(4, 2, 16, 0.9);
+  border: 1.5px solid var(--accent-gold);
+  border-radius: 4px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8), 0 5px 15px rgba(0, 240, 255, 0.15);
+  position: relative;
+  z-index: 10;
+}
+
+.tft-shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5rem;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+  padding-bottom: 0.4rem;
+}
+
+.tft-shop-title {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+}
+
+.tft-shop-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+
+/* Shop Cards */
+.tft-shop-card {
+  height: 140px;
+  background: linear-gradient(180deg, rgba(14, 8, 38, 0.85) 0%, rgba(5, 2, 14, 0.95) 100%);
+  border-top: 3px solid var(--tier-1);
+  border-left: 1px solid rgba(0, 240, 255, 0.05);
+  border-right: 1px solid rgba(0, 240, 255, 0.05);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.05);
+  border-radius: 3px;
+  padding: 0.65rem;
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.tft-shop-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.8),
+    0 0 15px var(--accent-gold-glow);
+  border-color: var(--accent-gold) !important;
+}
+
+.tft-shop-card.tier-1 { border-top-color: var(--tier-1); }
+.tft-shop-card.tier-2 { border-top-color: var(--tier-2); }
+.tft-shop-card.tier-3 { border-top-color: var(--tier-3); }
+.tft-shop-card.tier-4 { border-top-color: var(--tier-4); }
+.tft-shop-card.tier-5 { border-top-color: var(--tier-5); }
+
+.shop-card-cost {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--accent-gold);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* HSR Stellar Jade currency style */
+.shop-card-cost::before {
+  content: '';
+  width: 10px;
+  height: 14px;
+  background: linear-gradient(135deg, #00f0ff, #ff00ff);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+}
+
+/* HSR Traces / Skill Selection Cards */
+.augment-selection-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.augment-card {
+  background: radial-gradient(circle at top, rgba(34, 14, 78, 0.95) 0%, rgba(6, 2, 20, 0.98) 100%);
+  border: 1.5px solid var(--accent-gold);
+  border-radius: 6px;
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-slow);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.augment-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.augment-card.prismatic {
+  border-image: linear-gradient(135deg, #00f0ff, #ff00ff, #ffffff) 1;
+  box-shadow: 0 8px 32px rgba(0, 240, 255, 0.25);
+}
+
+.augment-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.9), 
+    0 0 20px rgba(0, 240, 255, 0.35);
+  border-color: #fff;
+}
+
+.augment-card.prismatic:hover {
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.9), 
+    0 0 25px rgba(255, 0, 240, 0.4);
+}
+
+.augment-icon-container {
+  width: 72px;
+  height: 72px;
+  background: rgba(4, 2, 16, 0.9);
+  border: 1.5px solid var(--accent-gold);
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.augment-icon-container > * {
+  transform: rotate(-45deg);
+}
+
+.augment-title {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.augment-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* HSR Traits/Paths */
+.traits-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.trait-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(14, 8, 38, 0.4);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-radius: 4px;
+  padding: 0.4rem 0.65rem;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.trait-item:hover {
+  background: rgba(24, 12, 58, 0.7);
+  border-color: var(--accent-gold);
+}
+
+/* Diamond Path Badge */
+.trait-hexagon {
+  width: 28px;
+  height: 28px;
+  background: #111;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: bold;
+  position: relative;
+}
+
+.trait-hexagon.bronze { background: var(--text-muted); }
+.trait-hexagon.silver { background: var(--path-harmony); }
+.trait-hexagon.gold { background: var(--path-erudition); }
+.trait-hexagon.prismatic { background: var(--path-prismatic); }
+
+.trait-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.trait-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.1rem 0.35rem;
+  border-radius: 10px;
+  color: var(--accent-gold);
+}
+
+/* HSR HUD Controls */
+.hud-btn {
+  background: rgba(20, 10, 48, 0.7);
+  border: 1px solid var(--accent-gold);
+  border-radius: 2px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 5px rgba(0, 240, 255, 0.1);
+  transition: all var(--transition-fast);
+}
+
+.hud-btn:hover {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: #fff;
+  box-shadow: 0 0 10px var(--accent-gold-glow);
+}
+
+.hud-btn:active {
+  transform: translateY(1px);
+}
+
+/* Text Gradient & Buttons */
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-gradient {
+  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-blue) 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 0.65rem 1.5rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.2);
+}
+
+.btn-gradient:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-gold) 100%);
+  box-shadow: 0 6px 20px rgba(255, 0, 240, 0.4);
+}
+
+.btn-outline {
+  background: rgba(6, 3, 20, 0.8);
+  color: var(--text-primary);
+  border: 1px solid var(--accent-gold);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  padding: 0.65rem 1.5rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-outline:hover {
+  border-color: #fff;
+  background: rgba(0, 240, 255, 0.1);
+  box-shadow: 0 0 10px var(--accent-gold-glow);
+}
+
+/* Document layout rules for HSR templates */
+.doc-header {
+  margin-bottom: 2rem;
+  border-bottom: 2px solid rgba(0, 240, 255, 0.2);
+  padding-bottom: 1rem;
+}
+
+.doc-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.doc-title {
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 12px var(--accent-gold-glow);
+  text-transform: uppercase;
+}
+
+.doc-subtitle {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.doc-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.doc-list {
+  list-style-type: none;
+  padding-left: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.doc-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.doc-list li::before {
+  content: '';
+  width: 6px;
+  height: 8px;
+  background: var(--accent-gold);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  position: absolute;
+  left: 0;
+  top: 7px;
+  box-shadow: 0 0 5px var(--accent-gold-glow);
+}
+
+.callout-box {
+  background: rgba(0, 240, 255, 0.03);
+  border-left: 4px solid var(--accent-gold);
+  padding: 1.25rem;
+  border-radius: 0 6px 6px 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.visualizer-container {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(0, 240, 255, 0.2);
+  padding-top: 2rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(0, 240, 255, 0.15);
+  background: rgba(4, 2, 16, 0.9);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulse-gem {
+  0%, 100% { transform: rotate(45deg) scale(1); opacity: 0.8; }
+  50% { transform: rotate(45deg) scale(1.15); opacity: 1; box-shadow: 0 0 18px var(--accent-blue); }
+}
+
+@keyframes shuffle-shop {
+  0% { transform: rotateY(0) scale(1); opacity: 1; }
+  50% { transform: rotateY(90deg) scale(0.9); opacity: 0.4; }
+  100% { transform: rotateY(0) scale(1); opacity: 1; }
+}
+
+.shop-shuffle {
+  animation: shuffle-shop 0.35s ease-in-out forwards;
+}
+
+/* Bento Grid */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .tft-shop-grid {
+    grid-template-columns: repeat(3, 2fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    height: 100vh;
+    left: -260px;
+    top: 0;
+    width: 260px !important;
+  }
+  .sidebar.active {
+    left: 0;
+  }
+  .sidebar-logo-text, .sidebar-text, .sidebar-footer-content {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  .app-layout {
+    flex-direction: column;
+  }
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+  .tft-shop-grid {
+    grid-template-columns: 1fr;
+  }
+  .tft-shop-card {
+    height: 100px;
+  }
+  .augment-selection-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .main-content {
+    padding: 1.5rem 1rem;
+  }
+  .content-glass-panel {
+    margin: 1rem auto 3rem auto !important;
+    width: calc(100% - 2rem) !important;
+    border-radius: 8px;
+    padding: 1.25rem 1rem 3rem 1rem !important;
+  }
+  .doc-title {
+    font-size: 1.8rem;
+  }
+  .hsr-curved-menu {
+    display: none !important;
+  }
+  .kbd-guide-hud {
+    display: none !important;
+  }
+}
+
+/* VT323 Hacker Monospace Font Styling */
+.hacker-font {
+  font-family: var(--font-hacker), monospace !important;
+  letter-spacing: 1.5px;
+}
+
+/* HSR Floating Curved Menu styling - Landing page clean menu options */
+.hsr-curved-menu {
+  position: fixed;
+  left: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+.hsr-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-origin: left center;
+  position: relative;
+  letter-spacing: 2px;
+}
+
+/* Curved crescent layout offsets (curving inwards from left edge) */
+.hsr-menu-item.offset-0 { transform: translateX(-25px) skewX(-12deg); }
+.hsr-menu-item.offset-1 { transform: translateX(0px) skewX(-12deg); }
+.hsr-menu-item.offset-2 { transform: translateX(-25px) skewX(-12deg); }
+
+.hsr-menu-item.focused {
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+  transform: translateX(15px) scale(1.1) skewX(-12deg) !important;
+}
+
+.hsr-menu-item.active {
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 0, 240, 0.6);
+}
+
+/* Slanted pointer slash underneath menu text */
+.hsr-menu-item::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background: linear-gradient(90deg, #ff00ff, #00f0ff);
+  transition: width 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hsr-menu-item.focused::after {
+  width: 100%;
+}
+
+/* Keyboard Guide HUD */
+.kbd-guide-hud {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 2rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: rgba(5, 2, 20, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  padding: 0.45rem 1rem;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+  pointer-events: none;
+}
+
+.kbd-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.kbd-key {
+  background: #111;
+  border: 1.5px solid rgba(0, 240, 255, 0.5);
+  border-bottom-width: 3px;
+  color: var(--accent-gold);
+  font-weight: bold;
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  text-shadow: 0 0 3px rgba(0, 240, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
