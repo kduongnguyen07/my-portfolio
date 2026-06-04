@@ -2,10 +2,10 @@ import React from 'react';
 
 export default function Sidebar({ activeTab, setActiveTab }) {
   const tabs = [
-    { id: 'rooms', label: 'Student Homes', className: 'tab-blue' },
-    { id: 'living', label: 'Our Way of Living', className: 'tab-yellow' },
-    { id: 'community', label: 'Community', className: 'tab-orange' },
-    { id: 'contact', label: 'Contact', className: 'tab-green' }
+    { id: 'community', label: 'Thông Tin Học Viên', className: 'tab-orange' },
+    { id: 'rooms', label: 'Báo Cáo Thực Hành', className: 'tab-blue' },
+    { id: 'living', label: 'Thu Hoạch & Lộ Trình', className: 'tab-yellow' },
+    { id: 'contact', label: 'Liên Hệ Hợp Tác', className: 'tab-green' }
   ];
 
   return (
@@ -43,12 +43,12 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           className="btn-book-unit"
           onClick={() => setActiveTab('contact')}
         >
-          Book your Unit
+          Liên hệ hợp tác
         </button>
 
         <div className="sidebar-footer">
-          <a href="#lang" className="lang-switch" onClick={(e) => { e.preventDefault(); alert("Language switcher clicked! (Ελληνικά)"); }}>
-            Ελληνικά
+          <a href="#lang" className="lang-switch" onClick={(e) => { e.preventDefault(); alert("Đã chuyển đổi ngôn ngữ! (Tiếng Việt)"); }}>
+            Tiếng Việt
           </a>
           
           <div className="social-links">

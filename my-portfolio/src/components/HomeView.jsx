@@ -119,20 +119,21 @@ export default function HomeView({ setActiveTab }) {
       <section className="hero-banner">
         <div className="hero-image-wrapper">
           <img 
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600" 
-            alt="Students hanging out in the common room" 
+            src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600" 
+            alt="Abstract futuristic glowing lines" 
             className="hero-image"
           />
           <div className="hero-overlay">
-            <h1 className="hero-title">Home of the uniquely awesome.</h1>
+            <h1 className="hero-title">Cổng Thông Tin Học Viên K70 AI Engineer</h1>
             <p className="hero-subtitle">
-              All-inclusive student accommodation in Athens with everything you need to live, study and connect.
+              Hệ thống báo cáo học tập, tích hợp 6 nhiệm vụ lập trình thực tế, lộ trình phát triển và tuyên ngôn đạo đức AI của Dương Nguyên Khánh (MSSV: 25020210).
             </p>
             <button 
               className="btn-book-unit hero-btn"
-              onClick={() => setActiveTab('contact')}
+              onClick={() => setActiveTab('rooms')}
+              style={{ background: 'var(--color-blue)', color: '#ffffff' }}
             >
-              Book your Unit
+              Báo Cáo Thực Hành
             </button>
           </div>
         </div>
@@ -143,23 +144,23 @@ export default function HomeView({ setActiveTab }) {
         <div className="neo-grid-2">
           
           {/* Location info card */}
-          <div className="neo-card location-card">
-            <h2 className="card-title">Where your everyday just works</h2>
+          <div className="neo-card location-card" style={{ background: 'var(--color-yellow)' }}>
+            <h2 className="card-title">Kết Hợp Tư Duy Hệ Thống & Kỹ Nghệ AI</h2>
             <p className="card-text" style={{ color: '#111111' }}>
-              Wake up, step out, you're there. Campus, classes, night out - all within easy reach. No time wasted. Because at Units, location isn't random. It's chosen to match your rhythm and make life work better.
+              Học tập và nghiên cứu tại UET - VNU. Hệ thống bài tập được tổ chức khoa học, kết hợp quy trình làm việc chuyên nghiệp của Git Flow, quản trị Kanban và tối ưu hóa prompt bằng chuỗi suy nghĩ CoT.
             </p>
             
             <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              <div style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '1px' }}>Explore what's nearby:</div>
+              <div style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '1px' }}>Thông tin địa điểm:</div>
               <div className="tag-list">
-                <span className="tag-item" style={{ background: '#111111', color: '#ffffff' }}>Athens Parkside</span>
-                <span className="tag-item">Athens Exarchia</span>
-                <span className="tag-item">Panormou Metro</span>
+                <span className="tag-item" style={{ background: '#111111', color: '#ffffff' }}>UET Cầu Giấy</span>
+                <span className="tag-item">Hanoi, Vietnam</span>
+                <span className="tag-item">VNU Campus</span>
               </div>
             </div>
           </div>
 
-          {/* Interactive Athens Map simulation */}
+          {/* Interactive Map simulation */}
           <div className="location-map-wrapper">
             {/* Simple Grid Background simulating Map Coordinate lines */}
             <div style={{
@@ -218,7 +219,7 @@ export default function HomeView({ setActiveTab }) {
                 whiteSpace: 'nowrap',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
               }}>
-                Athens Units Parkside
+                Trường Đại học Công nghệ (UET)
               </div>
             </div>
 
@@ -235,7 +236,7 @@ export default function HomeView({ setActiveTab }) {
               fontSize: '0.75rem',
               fontWeight: 700
             }}>
-              LAT: 37.9838° N | LON: 23.7275° E
+              LAT: 21.0382° N | LON: 105.7828° E
             </div>
           </div>
 
@@ -244,55 +245,55 @@ export default function HomeView({ setActiveTab }) {
         {/* 3. Amenities Deck: One Unit - Your card covers everything */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1rem' }}>
           <div>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-1.5px' }}>One Unit. Your card covers everything.</h2>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-1.5px' }}>Hạ tầng học tập của học viên</h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginTop: '0.5rem' }}>
-              Your student lease includes access to all spaces, utility bills, high-speed WiFi, and 24/7 client support.
+              Bộ khung kỹ năng và hạ tầng công nghệ hỗ trợ đắc lực xuyên suốt quá trình thực hành lập trình và nghiên cứu AI.
             </p>
           </div>
 
           <div className="neo-grid-4">
             
-            {/* Card 1: Community spaces */}
+            {/* Card 1: Tư duy hệ thống */}
             <div className="neo-card">
               <div style={{ background: 'rgba(0, 71, 255, 0.1)', color: 'var(--color-blue)', padding: '0.6rem', borderRadius: '6px', alignSelf: 'flex-start' }}>
                 <Users size={24} />
               </div>
-              <h3 className="card-title" style={{ fontSize: '1.35rem' }}>Community Living</h3>
+              <h3 className="card-title" style={{ fontSize: '1.35rem' }}>Tư Duy Hệ Thống</h3>
               <p className="card-text" style={{ fontSize: '0.9rem' }}>
-                Access shared social lounges, a fully equipped gym, and a self-service laundry room 24/7.
+                Quản lý cấu trúc cây thư mục và không gian làm việc khoa học, gọn gàng, dễ mở rộng.
               </p>
             </div>
 
-            {/* Card 2: Security */}
+            {/* Card 2: Quy trình chuyên nghiệp */}
             <div className="neo-card">
               <div style={{ background: 'rgba(255, 102, 0, 0.1)', color: 'var(--color-orange)', padding: '0.6rem', borderRadius: '6px', alignSelf: 'flex-start' }}>
                 <Shield size={24} />
               </div>
-              <h3 className="card-title" style={{ fontSize: '1.35rem' }}>Full Security</h3>
+              <h3 className="card-title" style={{ fontSize: '1.35rem' }}>Quy Trình Chuyên Nghiệp</h3>
               <p className="card-text" style={{ fontSize: '0.9rem' }}>
-                24/7 CCTV surveillance, night guard patrols, and secure electronic keycard access.
+                Quản trị dự án qua sơ đồ Kanban và phân chia các luồng Git Flow cộng tác tối ưu.
               </p>
             </div>
 
-            {/* Card 3: Smart Living */}
+            {/* Card 3: Kỹ nghệ câu lệnh */}
             <div className="neo-card">
               <div style={{ background: 'rgba(0, 204, 102, 0.1)', color: 'var(--color-green)', padding: '0.6rem', borderRadius: '6px', alignSelf: 'flex-start' }}>
                 <Smartphone size={24} />
               </div>
-              <h3 className="card-title" style={{ fontSize: '1.35rem' }}>Smart Units</h3>
+              <h3 className="card-title" style={{ fontSize: '1.35rem' }}>Prompt Engineering</h3>
               <p className="card-text" style={{ fontSize: '0.9rem' }}>
-                Digital room keys, automated maintenance tickets, and smart heating controls.
+                Thiết kế câu lệnh cấu trúc logic, áp dụng kỹ thuật CoT giúp tăng hiệu năng làm việc với LLM.
               </p>
             </div>
 
-            {/* Card 4: Support */}
+            {/* Card 4: Đạo đức AI */}
             <div className="neo-card">
               <div style={{ background: 'rgba(255, 204, 0, 0.15)', color: '#b28f00', padding: '0.6rem', borderRadius: '6px', alignSelf: 'flex-start' }}>
                 <HeartHandshake size={24} />
               </div>
-              <h3 className="card-title" style={{ fontSize: '1.35rem' }}>24/7 Support</h3>
+              <h3 className="card-title" style={{ fontSize: '1.35rem' }}>Đạo Đức & Trách Nhiệm</h3>
               <p className="card-text" style={{ fontSize: '0.9rem' }}>
-                Onboarding check-in support, general cleaning assistance, and fast hardware maintenance.
+                Tuân thủ nghiêm ngặt 6 tiêu chuẩn đạo đức AI, chịu trách nhiệm giải trình và bảo mật thông tin.
               </p>
             </div>
 
@@ -302,9 +303,9 @@ export default function HomeView({ setActiveTab }) {
         {/* 4. "What defines us" Section with Interactive Pixel Grid Art */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1rem' }}>
           <div>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-1.5px' }}>What defines us</h2>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-1.5px' }}>Triết lý hoạt động</h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginTop: '0.5rem' }}>
-              We design accommodations around student needs, combining technology, comfort, and community care.
+              Xây dựng hệ thống lấy con người làm trung tâm, tối ưu hóa giao diện thiết kế và đặt sự tận tụy lên hàng đầu.
             </p>
           </div>
 
@@ -313,7 +314,7 @@ export default function HomeView({ setActiveTab }) {
             {/* Grid 1: For People */}
             <div className="pixel-grid-card">
               <div className="pixel-grid-header" style={{ background: 'var(--color-blue)', color: '#ffffff' }}>
-                For People
+                Dành Cho Con Người
               </div>
               <div className="pixel-grid-canvas-wrapper" style={{ background: 'var(--color-blue)' }}>
                 <PixelGridCanvas preset="smile" color="var(--color-green)" />
@@ -323,7 +324,7 @@ export default function HomeView({ setActiveTab }) {
             {/* Grid 2: By Design */}
             <div className="pixel-grid-card">
               <div className="pixel-grid-header" style={{ background: 'var(--color-orange)', color: '#ffffff' }}>
-                By Design
+                Bởi Thiết Kế
               </div>
               <div className="pixel-grid-canvas-wrapper" style={{ background: 'var(--color-orange)' }}>
                 <PixelGridCanvas preset="arrow" color="var(--color-yellow)" />
@@ -333,7 +334,7 @@ export default function HomeView({ setActiveTab }) {
             {/* Grid 3: With Care */}
             <div className="pixel-grid-card">
               <div className="pixel-grid-header" style={{ background: 'var(--color-green)', color: '#ffffff' }}>
-                With Care
+                Với Sự Tận Tụy
               </div>
               <div className="pixel-grid-canvas-wrapper" style={{ background: 'var(--color-green)' }}>
                 <PixelGridCanvas preset="heart" color="var(--color-yellow)" />
@@ -347,7 +348,7 @@ export default function HomeView({ setActiveTab }) {
             onClick={() => setActiveTab('living')}
             style={{ alignSelf: 'center', marginTop: '1.5rem', padding: '0.85rem 1.8rem' }}
           >
-            <span>Our way of living</span>
+            <span>Thu hoạch & Lộ trình</span>
             <ArrowRight size={16} />
           </button>
         </div>
@@ -356,27 +357,27 @@ export default function HomeView({ setActiveTab }) {
       {/* 5. Corporate Newsletter & Footer */}
       <footer className="news-footer">
         <div className="newsletter-box">
-          <h2 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-1px' }}>Staying connected.</h2>
+          <h2 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-1px' }}>Kết nối học thuật.</h2>
           <p style={{ color: 'var(--text-muted)', lineHeight: '1.5', maxWidth: '450px' }}>
-            Get student life updates, upcoming housing availability listings, and promo code announcements directly.
+            Nhận thông báo cập nhật về các bài nghiên cứu, dự án mã nguồn mở và tài liệu lập trình AI mới nhất.
           </p>
           
           {subscribed ? (
             <div style={{ color: 'var(--color-green)', fontWeight: 800, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              ✓ Thank you for subscribing to our newsletter!
+              ✓ Cảm ơn bạn đã đăng ký nhận thông tin học thuật!
             </div>
           ) : (
             <form onSubmit={handleSubscribe} className="newsletter-input-group">
               <input 
                 type="email" 
-                placeholder="Your email address" 
+                placeholder="Địa chỉ email của bạn" 
                 className="newsletter-input"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
               />
               <button type="submit" className="newsletter-btn">
-                Join
+                Đăng Ký
               </button>
             </form>
           )}
@@ -384,14 +385,13 @@ export default function HomeView({ setActiveTab }) {
 
         <div className="corporate-links">
           <div className="corp-nav">
-            <a href="#faqs" className="corp-link" onClick={e => e.preventDefault()}>FAQs</a>
-            <a href="#privacy" className="corp-link" onClick={e => e.preventDefault()}>Privacy Policy</a>
-            <a href="#cookies" className="corp-link" onClick={e => e.preventDefault()}>Cookies Policy</a>
+            <a href="#faqs" className="corp-link" onClick={e => e.preventDefault()}>Câu Hỏi Thường Gặp</a>
+            <a href="#privacy" className="corp-link" onClick={e => e.preventDefault()}>Chính Sách Bản Quyền</a>
           </div>
 
           <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            <div>© 2026 KORPO Development. Web design by KORPO. Code by units.</div>
-            <div style={{ marginTop: '0.25rem', fontFamily: 'var(--font-mono)' }}>BUILD_ID: 994.404_ATHENS</div>
+            <div>© 2026 Dương Nguyên Khánh. Lớp K70 AI Engineer - UET - VNU.</div>
+            <div style={{ marginTop: '0.25rem', fontFamily: 'var(--font-mono)' }}>BUILD_ID: 25020210_HANOI</div>
           </div>
         </div>
       </footer>

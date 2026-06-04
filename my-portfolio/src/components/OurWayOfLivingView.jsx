@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Sparkles, RefreshCw } from 'lucide-react';
+import { ArrowRight, RefreshCw, Calendar, Award, Compass, Milestone, Sparkles } from 'lucide-react';
 
-export default function OurWayOfLivingView({ setActiveTab }) {
-  // 16x10 Grid state for the drawing maze
+export default function OurWayOfLivingView() {
+  const [activePlan, setActivePlan] = useState('short');
+
+  // Drawing Canvas (16x10 grid)
   const cols = 16;
   const rows = 10;
   const [grid, setGrid] = useState(Array(rows * cols).fill(false));
@@ -10,23 +12,18 @@ export default function OurWayOfLivingView({ setActiveTab }) {
   const [direction, setDirection] = useState('RIGHT');
   const [isAutoMoving, setIsAutoMoving] = useState(true);
 
-  // Hover glitch text state
-  const [glitchText, setGlitchText] = useState("OUR WAY OF LIVING");
-
-  // Grid drawing movement interval
+  // Auto sweep path logic for grid drawing
   useEffect(() => {
     if (!isAutoMoving) return;
 
     const interval = setInterval(() => {
       setActivePixel((prev) => {
-        // Calculate current r, c
         const r = Math.floor(prev / cols);
         const c = prev % cols;
         
         let nextR = r;
         let nextC = c;
 
-        // Simple bounce-patrol maze path logic
         if (direction === 'RIGHT') {
           if (c < cols - 1) nextC = c + 1;
           else {
@@ -43,7 +40,6 @@ export default function OurWayOfLivingView({ setActiveTab }) {
 
         const nextIndex = nextR * cols + nextC;
         
-        // Turn on the trail
         setGrid(g => {
           const newG = [...g];
           newG[nextIndex] = true;
@@ -64,7 +60,6 @@ export default function OurWayOfLivingView({ setActiveTab }) {
   };
 
   const handleCellHover = (index) => {
-    // Draw on hover
     setGrid(g => {
       const newG = [...g];
       newG[index] = !newG[index];
@@ -72,152 +67,268 @@ export default function OurWayOfLivingView({ setActiveTab }) {
     });
   };
 
-  const triggerGlitch = () => {
-    const chars = "O U R _ W A Y _ O F _ L I V I N G";
-    const glitched = chars.split("").map(char => {
-      if (char === " ") return " ";
-      return Math.random() > 0.7 ? "█" : char;
-    }).join("");
-    setGlitchText(glitched);
-    setTimeout(() => {
-      setGlitchText("OUR WAY OF LIVING");
-    }, 150);
-  };
+  const skillsData = [
+    { name: 'Quản lý cấu trúc tệp (File System)', before: 40, after: 90 },
+    { name: 'Kỹ nghệ câu lệnh (Prompt Engineering)', before: 30, after: 95 },
+    { name: 'Cộng tác & Quy trình (Git Flow / Kanban)', before: 20, after: 85 },
+    { name: 'Đồng sáng tạo nội dung AI (Generative AI)', before: 50, after: 90 },
+    { name: 'Ý thức Đạo đức công nghệ (AI Ethics)', before: 60, after: 95 }
+  ];
 
   return (
     <div className="main-content" style={{ background: 'var(--color-yellow)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       
-      {/* Top Banner section */}
-      <section style={{ padding: '3.5rem 3rem 1rem 3rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <h1 
-          className="hacker-font"
-          onMouseEnter={triggerGlitch}
-          onClick={triggerGlitch}
-          style={{ 
-            fontSize: '5rem', 
-            fontWeight: 900, 
-            letterSpacing: '-3px', 
-            color: 'var(--text-main)', 
-            cursor: 'pointer',
-            lineHeight: 0.9,
-            userSelect: 'none'
-          }}
-        >
-          {glitchText}
+      {/* 1. Page Header */}
+      <section style={{ padding: '3.5rem 3rem 1.5rem 3rem' }}>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: 900, letterSpacing: '-2px', color: 'var(--text-main)', lineHeight: 1 }}>
+          Thu Hoạch & Lộ Trình
         </h1>
-        <p style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-main)', opacity: 0.85, maxWidth: '600px' }}>
-          We think about student living differently. Flat structures, high agency, zero hassle, and total freedom.
+        <p style={{ fontSize: '1.15rem', color: 'var(--text-main)', opacity: 0.85, marginTop: '0.5rem', maxWidth: '800px' }}>
+          Tổng kết quá trình phát triển năng lực số cá nhân và hoạch định lộ trình nghiên cứu AI dài hạn.
         </p>
       </section>
 
-      {/* Main Split Grid */}
+      {/* 2. Main Grid Layout */}
       <section style={{ padding: '0 3rem 3rem 3rem' }} className="grid-container">
         <div className="neo-grid-2">
           
-          {/* Drawing Grid Box */}
-          <div className="neo-card" style={{ background: '#ffffff', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ fontWeight: 800, fontSize: '1.05rem', textTransform: 'uppercase' }}>Interactive Pixel Grid Canvas</div>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button 
-                  onClick={() => setIsAutoMoving(!isAutoMoving)} 
-                  style={{
-                    background: isAutoMoving ? 'var(--color-blue)' : 'var(--bg-site)',
-                    color: isAutoMoving ? '#ffffff' : 'var(--text-main)',
-                    border: '1.5px solid var(--text-main)',
-                    padding: '0.25rem 0.6rem',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {isAutoMoving ? 'Pause Agent' : 'Start Agent'}
-                </button>
-                <button 
-                  onClick={clearGrid}
-                  style={{
-                    background: 'var(--bg-site)',
-                    border: '1.5px solid var(--text-main)',
-                    padding: '0.25rem 0.6rem',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.25rem'
-                  }}
-                >
-                  <RefreshCw size={10} />
-                  <span>Clear</span>
-                </button>
+          {/* Left Column: Growth & Challenges */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            
+            {/* Growth assessment card */}
+            <div className="neo-card" style={{ background: '#ffffff' }}>
+              <h2 className="card-title" style={{ fontSize: '1.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Award size={22} style={{ color: 'var(--color-orange)' }} />
+                <span>Sự Trưởng Thành Cá Nhân</span>
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+                <p>
+                  <strong>• Chuẩn hóa tư duy hệ thống:</strong> Từ tổ chức tệp tin theo thói quen tự phát, tôi đã làm chủ các quy tắc quản trị dự án, thiết lập nhánh Git Flow chuyên nghiệp và sơ đồ Kanban hỗ trợ làm việc nhóm.
+                </p>
+                <p>
+                  <strong>• Cộng tác hiệu quả với AI:</strong> Chuyển đổi phương thức khai thác Generative AI từ hỏi-đáp đơn thuần sang thiết lập hệ thống Prompt kết hợp chuỗi suy nghĩ CoT giúp tăng tốc độ viết code.
+                </p>
               </div>
             </div>
 
-            {/* The 16x10 Drawing Canvas Grid */}
-            <div 
-              style={{
-                display: 'grid',
-                gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                borderTop: '2px solid var(--text-main)',
-                borderLeft: '2px solid var(--text-main)',
-                background: '#ffffff',
-                boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.05)'
-              }}
-            >
-              {grid.map((active, idx) => {
-                const isHead = activePixel === idx && isAutoMoving;
-                return (
-                  <div
-                    key={idx}
-                    onMouseEnter={() => handleCellHover(idx)}
-                    style={{
-                      aspectRatio: 1,
-                      background: isHead 
-                        ? 'var(--color-orange)' 
-                        : (active ? 'var(--text-main)' : 'transparent'),
-                      borderRight: '1px solid rgba(0,0,0,0.08)',
-                      borderBottom: '1px solid rgba(0,0,0,0.08)',
-                      transition: isHead ? 'none' : 'background 0.2s',
-                      cursor: 'crosshair'
-                    }}
-                  />
-                );
-              })}
+            {/* Challenges & Experience card */}
+            <div className="neo-card" style={{ background: '#ffffff' }}>
+              <h2 className="card-title" style={{ fontSize: '1.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Compass size={22} style={{ color: 'var(--color-blue)' }} />
+                <span>Thách Thức & Kinh Nghiệm</span>
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+                <p>
+                  <strong>• Thách thức lớn nhất:</strong> Duy trì tính nhất quán của thiết kế giao diện (Neo-Brutalist Grid) trong khi vẫn đảm bảo cấu trúc nội dung khoa học chuẩn học thuật.
+                </p>
+                <p>
+                  <strong>• Bài học kinh nghiệm:</strong> Luôn bắt đầu giải quyết từ tầng mô hình cấu trúc dữ liệu thô trước khi chuyển sang xây dựng tầng hiển thị giao diện người dùng.
+                </p>
+              </div>
             </div>
 
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-              TIP: Hover or drag cursor over grid cells to write customized pixel drawings!
-            </div>
           </div>
 
-          {/* Living Principles card */}
-          <div className="neo-card" style={{ background: '#ffffff' }}>
-            <h2 className="card-title">A new approach to student living</h2>
+          {/* Right Column: Roadmap Toggle & Growth Chart */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', color: 'var(--text-muted)' }}>
-              <p>• Fully furnished studio apartments ready for move-in from day one.</p>
-              <p>• Fast utility connections included under your single unified card billing.</p>
-              <p>• Full freedom: enjoy sharing gym, laundry, and dining spaces with zero booking lag.</p>
-              <p>• Student-first ecosystem designed in central hubs, keeping university courses within easy reach.</p>
+            {/* Roadmap toggle deck */}
+            <div className="neo-card" style={{ background: '#ffffff' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h2 className="card-title" style={{ fontSize: '1.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Milestone size={22} style={{ color: 'var(--color-green)' }} />
+                  <span>Lộ Trình Phát Triển</span>
+                </h2>
+                
+                <div style={{ display: 'flex', gap: '0.4rem', border: '1.5px solid var(--text-main)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <button 
+                    onClick={() => setActivePlan('short')}
+                    style={{
+                      background: activePlan === 'short' ? 'var(--color-yellow)' : 'transparent',
+                      border: 'none',
+                      padding: '0.25rem 0.6rem',
+                      fontWeight: 800,
+                      fontSize: '0.75rem',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Ngắn hạn
+                  </button>
+                  <button 
+                    onClick={() => setActivePlan('long')}
+                    style={{
+                      background: activePlan === 'long' ? 'var(--color-yellow)' : 'transparent',
+                      borderLeft: '1.5px solid var(--text-main)',
+                      borderTop: 'none',
+                      borderRight: 'none',
+                      borderBottom: 'none',
+                      padding: '0.25rem 0.6rem',
+                      fontWeight: 800,
+                      fontSize: '0.75rem',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Dài hạn
+                  </button>
+                </div>
+              </div>
+
+              {activePlan === 'short' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+                  <div style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--color-orange)' }}>
+                    Kế hoạch ngắn hạn (1 - 2 năm tới):
+                  </div>
+                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                    <li>• Làm chủ giải thuật học sâu (Deep Learning) và học máy nâng cao.</li>
+                    <li>• Nâng cao trình độ Full-stack Javascript (React, Node.js, Express).</li>
+                    <li>• Hoàn thành thực tập vị trí AI Engineer tại các phòng nghiên cứu.</li>
+                  </ul>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+                  <div style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--color-blue)' }}>
+                    Tầm nhìn dài hạn (3 - 5 năm tới):
+                  </div>
+                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                    <li>• Dẫn dắt kỹ thuật cho các dự án phát triển mô hình AI lớn.</li>
+                    <li>• Thiết kế hệ thống đa tác nhân (Multi-Agent System) quy mô lớn.</li>
+                    <li>• Nghiên cứu triển khai các giải pháp AI Edge tối ưu tài nguyên.</li>
+                  </ul>
+                </div>
+              )}
             </div>
 
-            <div style={{ marginTop: 'auto', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            {/* Growth progress charts */}
+            <div className="neo-card" style={{ background: '#ffffff' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Chỉ Số Tăng Trưởng Kỹ Năng</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.5rem' }}>
+                {skillsData.map((skill, idx) => (
+                  <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700 }}>
+                      <span>{skill.name}</span>
+                      <span style={{ color: 'var(--color-orange)' }}>
+                        {skill.before}% ➔ {skill.after}%
+                      </span>
+                    </div>
+                    {/* Double progress bar */}
+                    <div style={{ width: '100%', height: '14px', background: '#eaeaea', border: '1.5px solid var(--text-main)', borderRadius: '4px', position: 'relative', overflow: 'hidden' }}>
+                      <div 
+                        style={{
+                          width: `${skill.after}%`,
+                          height: '100%',
+                          background: 'var(--color-yellow)',
+                          transition: 'width 1s ease'
+                        }}
+                      />
+                      <div 
+                        style={{
+                          width: `${skill.before}%`,
+                          height: '100%',
+                          background: 'var(--color-blue)',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          transition: 'width 1s ease'
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+                <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', fontWeight: 700, marginTop: '0.25rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <div style={{ width: '10px', height: '10px', background: 'var(--color-blue)', border: '1px solid #000' }} />
+                    <span>Trước khóa học</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <div style={{ width: '10px', height: '10px', background: 'var(--color-yellow)', border: '1px solid #000' }} />
+                    <span>Hiện tại</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* 3. Interactive Pixel Grid (retained for design fidelity) */}
+        <div className="neo-card" style={{ background: '#ffffff', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontWeight: 800, fontSize: '1.05rem', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Sparkles size={16} style={{ color: 'var(--color-orange)' }} />
+              <span>Interactive Pixel Grid Canvas</span>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button 
-                className="flat-btn btn-dark"
-                onClick={() => setActiveTab('rooms')}
+                onClick={() => setIsAutoMoving(!isAutoMoving)} 
+                style={{
+                  background: isAutoMoving ? 'var(--color-blue)' : 'var(--bg-site)',
+                  color: isAutoMoving ? '#ffffff' : 'var(--text-main)',
+                  border: '1.5px solid var(--text-main)',
+                  padding: '0.25rem 0.6rem',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
               >
-                <span>Check out our Units</span>
-                <ArrowRight size={14} />
+                {isAutoMoving ? 'Pause Agent' : 'Start Agent'}
+              </button>
+              <button 
+                onClick={clearGrid}
+                style={{
+                  background: 'var(--bg-site)',
+                  border: '1.5px solid var(--text-main)',
+                  padding: '0.25rem 0.6rem',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem'
+                }}
+              >
+                <RefreshCw size={10} />
+                <span>Clear</span>
               </button>
             </div>
           </div>
 
+          <div 
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${cols}, 1fr)`,
+              borderTop: '2px solid var(--text-main)',
+              borderLeft: '2px solid var(--text-main)',
+              background: '#ffffff'
+            }}
+          >
+            {grid.map((active, idx) => {
+              const isHead = activePixel === idx && isAutoMoving;
+              return (
+                <div
+                  key={idx}
+                  onMouseEnter={() => handleCellHover(idx)}
+                  style={{
+                    aspectRatio: 1,
+                    background: isHead 
+                      ? 'var(--color-orange)' 
+                      : (active ? 'var(--text-main)' : 'transparent'),
+                    borderRight: '1px solid rgba(0,0,0,0.08)',
+                    borderBottom: '1px solid rgba(0,0,0,0.08)',
+                    transition: isHead ? 'none' : 'background 0.2s',
+                    cursor: 'crosshair'
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
+
       </section>
 
-      {/* Floating design lines decoration */}
+      {/* Footer Banner */}
       <div style={{
         marginTop: 'auto',
         background: 'var(--text-main)',
@@ -232,8 +343,8 @@ export default function OurWayOfLivingView({ setActiveTab }) {
         textTransform: 'uppercase',
         letterSpacing: '1px'
       }}>
-        <span>GRID_RESOLUTION: 16x10_DOTS</span>
-        <span>STATUS: SYSTEM.ACTIVE_WAY_OF_LIVING</span>
+        <span>GRID_PATROL: ACTIVE</span>
+        <span>STUDENT_MSSV: 25020210</span>
       </div>
     </div>
   );

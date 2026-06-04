@@ -1,190 +1,145 @@
 import React, { useState } from 'react';
-import { Sparkles, ArrowRight, Check, Eye } from 'lucide-react';
+import TerminalVisualizer from './TerminalVisualizer';
+import SearchSimulator from './SearchSimulator';
+import PromptPlayground from './PromptPlayground';
+import KanbanBoard from './KanbanBoard';
+import ContentCreation from './ContentCreation';
 
-export default function StudentHomesView({ setActiveTab }) {
-  const roomTypes = [
-    {
-      id: 'studio-standard',
-      name: 'Standard Studio',
-      price: '€620',
-      period: 'month',
-      img: 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?q=80&w=600',
-      size: '22 sqm',
-      bed: 'Queen Bed',
-      features: ['Fully Furnished', 'Private Kitchen', 'Private Bathroom', 'High-speed Wifi', 'AC & Heating', 'Smart TV']
+export default function StudentHomesView() {
+  const tasks = [
+    { 
+      id: 'task1', 
+      name: 'Nhiệm vụ 1: Thư mục', 
+      desc: 'Giả lập Terminal & Cây thư mục workspace.', 
+      component: TerminalVisualizer,
+      difficulty: '3-Gold',
+      color: 'var(--color-blue)'
     },
-    {
-      id: 'studio-premium',
-      name: 'Premium Studio with Balcony',
-      price: '€710',
-      period: 'month',
-      img: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=600',
-      size: '26 sqm',
-      bed: 'King Bed',
-      features: ['Fully Furnished', 'Private Kitchen', 'Private Bathroom', 'High-speed Wifi', 'AC & Heating', 'Smart TV', 'Private Balcony', 'City View']
+    { 
+      id: 'task2', 
+      name: 'Nhiệm vụ 2: Tìm kiếm', 
+      desc: 'Bộ lọc toán tử Google Search nâng cao.', 
+      component: SearchSimulator,
+      difficulty: '4-Epic',
+      color: 'var(--color-yellow)'
     },
-    {
-      id: 'twin-share',
-      name: 'Twin Share Apartment',
-      price: '€450',
-      period: 'month',
-      img: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=600',
-      size: '35 sqm',
-      bed: '2 Single Beds',
-      features: ['Fully Furnished', 'Shared Kitchen', 'Private Bathroom', 'High-speed Wifi', 'AC & Heating', 'Smart TV', 'Spacious Desk']
+    { 
+      id: 'task3', 
+      name: 'Nhiệm vụ 3: Prompt', 
+      desc: 'So sánh luồng suy nghĩ Chain-of-Thought.', 
+      component: PromptPlayground,
+      difficulty: '4-Epic',
+      color: 'var(--color-orange)'
+    },
+    { 
+      id: 'task4', 
+      name: 'Nhiệm vụ 4: Kanban', 
+      desc: 'Quản trị dự án và Git Flow cộng tác.', 
+      component: KanbanBoard,
+      difficulty: '5-Legendary',
+      color: 'var(--color-green)'
+    },
+    { 
+      id: 'task5', 
+      name: 'Nhiệm vụ 5: Sáng tạo', 
+      desc: 'Quy trình sáng tạo kết hợp Generative AI.', 
+      component: ContentCreation,
+      difficulty: '5-Legendary',
+      color: '#a855f7' // Purple epic tier color
     }
   ];
 
-  const [selectedRoom, setSelectedRoom] = useState(roomTypes[0]);
+  const [selectedTaskId, setSelectedTaskId] = useState('task1');
+
+  const ActiveComponent = tasks.find(t => t.id === selectedTaskId)?.component;
 
   return (
     <div className="main-content">
-      {/* Hero section for Student Homes */}
-      <section style={{ padding: '3rem 3rem 1.5rem 3rem' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-2px' }}>Student accommodation at Units Parkside</h1>
+      {/* 1. Page Header */}
+      <section style={{ padding: '3.5rem 3rem 1.5rem 3rem' }}>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1 }}>
+          Báo Cáo Thực Hành
+        </h1>
+        <p style={{ fontSize: '1.15rem', color: 'var(--text-muted)', marginTop: '0.5rem', maxWidth: '800px' }}>
+          Tuyển tập 5 nhiệm vụ thực hành mô phỏng kỹ năng số và năng lực kỹ thuật AI, được lập trình tương tác hoàn chỉnh trên nền tảng React.
+        </p>
       </section>
 
-      {/* Main split grid */}
+      {/* 2. Main split view */}
       <section style={{ padding: '0 3rem 3rem 3rem' }} className="grid-container">
-        <div className="neo-grid-2">
+        <div 
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '320px 1fr',
+            gap: '2rem',
+            alignItems: 'stretch'
+          }} 
+          className="bento-grid"
+        >
           
-          {/* Room Selector and details */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', lineHeight: '1.6' }}>
-              Fully equipped and move-in ready, our Units provide everything you need to hit "student mode" from day one. Designed around your daily flow, Units Parkside features a 24/7 gym, a laundry room, and social spaces. Whether you're preparing for finals or catching up with friends, you'll find the perfect balance to live, study, and unwind.
-            </p>
-
-            {/* List of room tabs */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {roomTypes.map(room => (
-                <div 
-                  key={room.id}
-                  onClick={() => setSelectedRoom(room)}
-                  style={{
-                    background: selectedRoom.id === room.id ? 'var(--color-blue)' : 'var(--bg-card)',
-                    color: selectedRoom.id === room.id ? '#ffffff' : 'var(--text-main)',
-                    border: '2.5px solid var(--text-main)',
-                    borderRadius: '6px',
-                    padding: '1.25rem',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    boxShadow: selectedRoom.id === room.id ? '2px 2px 0px var(--text-main)' : 'var(--shadow-offset)',
-                    transform: selectedRoom.id === room.id ? 'translate(2px, 2px)' : 'none',
-                    transition: 'all var(--transition-fast)'
-                  }}
-                >
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                    <span style={{ fontSize: '1.25rem', fontWeight: 800 }}>{room.name}</span>
-                    <span style={{ fontSize: '0.85rem', opacity: 0.8, fontFamily: 'var(--font-mono)' }}>
-                      {room.size} | {room.bed}
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ fontSize: '1.5rem', fontWeight: 800 }}>{room.price}</span>
-                    <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>/{room.period}</span>
-                  </div>
-                </div>
-              ))}
+          {/* Task Selector Sidebar Column */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
+              Danh sách nhiệm vụ:
             </div>
-
-            {/* Selected room features */}
-            <div className="neo-card" style={{ marginTop: '0.5rem' }}>
-              <h3 className="card-title" style={{ fontSize: '1.5rem' }}>What's included in this Unit:</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.85rem', marginTop: '0.5rem' }}>
-                {selectedRoom.features.map((feat, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95rem', fontWeight: 600 }}>
-                    <div style={{ background: 'var(--color-green)', borderRadius: '50%', padding: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Check size={12} style={{ color: '#ffffff' }} />
-                    </div>
-                    <span>{feat}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Room Image and Quick Actions */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-            <div className="neo-card" style={{ padding: 0, overflow: 'hidden' }}>
-              <img 
-                src={selectedRoom.img} 
-                alt={selectedRoom.name} 
-                style={{ width: '100%', height: '360px', objectFit: 'cover', display: 'block' }}
-              />
-              <div style={{ padding: '1.5rem', borderTop: '2.5px solid var(--text-main)', background: '#ffffff' }}>
-                <h4 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Fully Furnished, Smart Access</h4>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.25rem', lineHeight: '1.4' }}>
-                  Features fully integrated private kitchen appliances, dedicated double desk study station, wardrobe space, and high-performance room ventilation.
-                </p>
-              </div>
-            </div>
-
-            <div 
-              className="neo-card" 
-              style={{ 
-                background: 'var(--color-yellow)',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-            >
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', maxWidth: '70%' }}>
-                <h4 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Ready to move in?</h4>
-                <p style={{ fontSize: '0.85rem', color: '#111111', opacity: 0.85 }}>
-                  Bookings for the upcoming Fall Semester are now open. Secure your room online in under 10 minutes.
-                </p>
-              </div>
-              <button 
-                className="flat-btn btn-dark"
-                onClick={() => setActiveTab('contact')}
-                style={{ padding: '0.85rem 1.4rem' }}
+            
+            {tasks.map(task => (
+              <div
+                key={task.id}
+                onClick={() => setSelectedTaskId(task.id)}
+                style={{
+                  background: selectedTaskId === task.id ? task.color : 'var(--bg-card)',
+                  color: selectedTaskId === task.id 
+                    ? (selectedTaskId === 'task2' ? 'var(--text-main)' : '#ffffff') 
+                    : 'var(--text-main)',
+                  border: '2.5px solid var(--text-main)',
+                  borderRadius: '6px',
+                  padding: '1.25rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.25rem',
+                  boxShadow: selectedTaskId === task.id ? '2px 2px 0px var(--text-main)' : 'var(--shadow-offset)',
+                  transform: selectedTaskId === task.id ? 'translate(2px, 2px)' : 'none',
+                  transition: 'all var(--transition-fast)'
+                }}
               >
-                <span>Book Now</span>
-                <ArrowRight size={14} />
-              </button>
-            </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '1.15rem', fontWeight: 800 }}>{task.name}</span>
+                  <span 
+                    style={{ 
+                      fontSize: '0.68rem', 
+                      fontWeight: 800, 
+                      background: selectedTaskId === task.id ? 'rgba(0,0,0,0.15)' : '#f0f0f0',
+                      padding: '0.15rem 0.4rem',
+                      borderRadius: '4px',
+                      fontFamily: 'var(--font-mono)'
+                    }}
+                  >
+                    {task.difficulty}
+                  </span>
+                </div>
+                <span style={{ fontSize: '0.8rem', opacity: 0.85, lineHeight: 1.3 }}>
+                  {task.desc}
+                </span>
+              </div>
+            ))}
           </div>
 
-        </div>
-      </section>
-
-      {/* Footer list of specs */}
-      <section style={{ background: '#ffffff', borderTop: '2.5px solid var(--text-main)', padding: '4rem 3rem' }}>
-        <h2 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-1px', marginBottom: '2.5rem' }}>Standard Apartment Specifications</h2>
-        
-        <div className="neo-grid-3">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, borderBottom: '1.5px solid var(--text-main)', paddingBottom: '0.5rem' }}>Furniture</h3>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <li>• Double storage bed with orthopedic mattress</li>
-              <li>• Full double study desk with drawer and task chair</li>
-              <li>• Spacious built-in wardrobe with sliding doors</li>
-              <li>• Dining table with two geometric chairs</li>
-            </ul>
+          {/* Interactive Visualizer Container Card */}
+          <div 
+            className="neo-card" 
+            style={{ 
+              background: '#ffffff', 
+              padding: '2rem', 
+              minHeight: '520px',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            {ActiveComponent && <ActiveComponent />}
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, borderBottom: '1.5px solid var(--text-main)', paddingBottom: '0.5rem' }}>Kitchen & Bath</h3>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <li>• Double electric ceramic cooktop and range hood</li>
-              <li>• Compact silent refrigerator & microwave oven</li>
-              <li>• Rain shower glass enclosure and modern vanity</li>
-              <li>• Automated smart under-floor ventilation</li>
-            </ul>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, borderBottom: '1.5px solid var(--text-main)', paddingBottom: '0.5rem' }}>Connectivity</h3>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <li>• Dedicated symmetric fiber WiFi (up to 200 Mbps)</li>
-              <li>• Smart electronic card lock with digital key bypass</li>
-              <li>• Direct wall connection Ethernet ports</li>
-              <li>• Pre-installed smart TV with Netflix/Prime casting</li>
-            </ul>
-          </div>
         </div>
       </section>
     </div>

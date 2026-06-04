@@ -27,7 +27,7 @@ export default function ContactView() {
   return (
     <div className="main-content">
       <section style={{ padding: '3rem 3rem 1.5rem 3rem' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-2px' }}>Book your Unit</h1>
+        <h1 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-2px' }}>Đề Xuất Hợp Tác</h1>
       </section>
 
       <section style={{ padding: '0 3rem 3rem 3rem' }} className="grid-container">
@@ -35,23 +35,23 @@ export default function ContactView() {
           
           {/* Booking Form Card */}
           <div className="neo-card">
-            <h2 className="card-title" style={{ fontSize: '1.6rem' }}>Select room details</h2>
+            <h2 className="card-title" style={{ fontSize: '1.6rem' }}>Thông tin đăng ký đề xuất</h2>
             
             {submitted ? (
               <div style={{ padding: '2rem 1rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', textAlign: 'center' }}>
                 <div style={{ background: 'var(--color-green)', color: '#ffffff', borderRadius: '50%', padding: '0.75rem', display: 'inline-flex' }}>
                   <CheckCircle size={32} />
                 </div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Booking Request Submitted!</h3>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Gửi Đề Xuất Thành Công!</h3>
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: '1.4', maxWidth: '320px' }}>
-                  Thank you, <strong>{formData.name}</strong>. Our student housing onboarding team will review your application and email the lease contract details to <strong>{formData.email}</strong> within 24 hours.
+                  Cảm ơn bạn, <strong>{formData.name}</strong>. Tôi sẽ xem xét thông tin đề xuất và phản hồi lại bạn qua địa chỉ email <strong>{formData.email}</strong> sớm nhất có thể.
                 </p>
                 <button 
                   className="flat-btn" 
                   onClick={() => setSubmitted(false)}
                   style={{ marginTop: '1rem' }}
                 >
-                  Submit another request
+                  Gửi đề xuất khác
                 </button>
               </div>
             ) : (
@@ -59,7 +59,7 @@ export default function ContactView() {
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                    <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Full Name *</label>
+                    <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Họ và tên *</label>
                     <input 
                       type="text" 
                       name="name"
@@ -71,7 +71,7 @@ export default function ContactView() {
                   </div>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                    <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Email Address *</label>
+                    <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Địa chỉ email *</label>
                     <input 
                       type="email" 
                       name="email"
@@ -85,7 +85,7 @@ export default function ContactView() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                    <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>University / School</label>
+                    <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Trường học / Đơn vị</label>
                     <input 
                       type="text" 
                       name="university"
@@ -96,7 +96,7 @@ export default function ContactView() {
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                    <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Target Move-in Date *</label>
+                    <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Ngày bắt đầu hợp tác dự kiến *</label>
                     <input 
                       type="date" 
                       name="startDate"
@@ -109,27 +109,27 @@ export default function ContactView() {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                  <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Select Room Type *</label>
+                  <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Hình thức hợp tác mong muốn *</label>
                   <select 
                     name="roomType"
                     value={formData.roomType}
                     onChange={handleChange}
                     style={{ border: '2.5px solid var(--text-main)', borderRadius: '4px', padding: '0.65rem 0.85rem', fontSize: '0.95rem', outline: 'none', background: '#ffffff', cursor: 'pointer' }}
                   >
-                    <option value="studio-standard">Standard Studio — €620/month</option>
-                    <option value="studio-premium">Premium Studio with Balcony — €710/month</option>
-                    <option value="twin-share">Twin Share Apartment — €450/month</option>
+                    <option value="research">Nghiên cứu dự án AI (AI Project Research)</option>
+                    <option value="development">Phát triển Web/App (Web & Mobile Development)</option>
+                    <option value="academic">Trao đổi học thuật (Academic Exchange)</option>
                   </select>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                  <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Additional Requirements / Notes</label>
+                  <label style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>Nội dung đề xuất / Yêu cầu chi tiết</label>
                   <textarea 
                     name="message"
                     rows="3"
                     value={formData.message}
                     onChange={handleChange}
-                    placeholder="E.g., roommate preferences, accessibility needs..."
+                    placeholder="Ví dụ: Mô tả dự án, yêu cầu kỹ năng, công nghệ đề xuất..."
                     style={{ border: '2.5px solid var(--text-main)', borderRadius: '4px', padding: '0.65rem 0.85rem', fontSize: '0.95rem', outline: 'none', fontFamily: 'var(--font-sans)', resize: 'vertical' }}
                   />
                 </div>
@@ -139,7 +139,7 @@ export default function ContactView() {
                   className="flat-btn btn-dark"
                   style={{ alignSelf: 'flex-start', marginTop: '0.5rem', padding: '0.8rem 1.6rem' }}
                 >
-                  <span>Submit Reservation</span>
+                  <span>Gửi Yêu Cầu Hợp Tác</span>
                   <Send size={14} />
                 </button>
 
@@ -152,40 +152,40 @@ export default function ContactView() {
             
             {/* Info contacts */}
             <div className="neo-card" style={{ background: 'var(--color-yellow)' }}>
-              <h2 className="card-title" style={{ fontSize: '1.6rem' }}>Athens Student HQ</h2>
+              <h2 className="card-title" style={{ fontSize: '1.6rem' }}>UET Student HQ</h2>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.5rem', fontWeight: 600 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <MapPin size={20} />
-                  <span>Leoforos Syggrou 194, Kallithea, Athens, Greece</span>
+                  <span>144 Xuân Thủy, Cầu Giấy, Hà Nội, Việt Nam</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <Phone size={20} />
-                  <span>+30 210 940 4404</span>
+                  <span>+84 24 3754 7461</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <Mail size={20} />
-                  <span>support@units.gr</span>
+                  <span>khanh.duong@uet.vnu.edu.vn</span>
                 </div>
               </div>
             </div>
 
-            {/* Micro FAQs */}
+            {/* FAQs */}
             <div className="neo-card">
-              <h3 className="card-title" style={{ fontSize: '1.4rem' }}>Frequently Asked Questions</h3>
+              <h3 className="card-title" style={{ fontSize: '1.4rem' }}>Câu Hỏi Thường Gặp</h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.5rem' }}>
                 <div>
-                  <div style={{ fontWeight: 800, fontSize: '0.9rem' }}>Are utility bills included?</div>
+                  <div style={{ fontWeight: 800, fontSize: '0.9rem' }}>Dự án có mã nguồn mở không?</div>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.15rem', lineHeight: '1.3' }}>
-                    Yes, water, electricity, heating/AC, high-speed WiFi, and 24/7 gym access are all 100% included.
+                    Có, toàn bộ mã nguồn của 6 nhiệm vụ thực hành và giao diện website này đều được công khai 100% trên GitHub.
                   </p>
                 </div>
                 
                 <div>
-                  <div style={{ fontWeight: 800, fontSize: '0.9rem' }}>What is the booking deposit?</div>
+                  <div style={{ fontWeight: 800, fontSize: '0.9rem' }}>Làm thế nào để liên hệ trực tiếp?</div>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.15rem', lineHeight: '1.3' }}>
-                    We require a security deposit equivalent to one month's rent. This is fully refundable upon move-out.
+                    Bạn có thể điền thông tin vào mẫu đăng ký đề xuất bên cạnh hoặc gửi thư điện tử trực tiếp đến địa chỉ khanh.duong@uet.vnu.edu.vn.
                   </p>
                 </div>
               </div>
