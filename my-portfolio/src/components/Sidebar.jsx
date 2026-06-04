@@ -12,16 +12,11 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     <aside className="sidebar">
       {/* Logo Section */}
       <div className="sidebar-logo">
-        <div className="logo-container" onClick={() => setActiveTab('home')}>
-          <span className="logo-text">un</span>
-          {/* Stem of the 'i' */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', width: '10px' }}>
-            <div className="logo-house-dot" />
-            <div style={{ width: '8px', height: '22px', background: '#111111' }} />
-          </div>
-          <span className="logo-text">ts.</span>
+        <div className="logo-container" onClick={() => setActiveTab('home')} style={{ display: 'flex', alignItems: 'flex-end', gap: '0.15rem' }}>
+          <span className="logo-text" style={{ fontSize: '1.75rem', letterSpacing: '-1.5px', textTransform: 'lowercase' }}>kduongnguyen07</span>
+          <div className="logo-house-dot" style={{ width: '8px', height: '8px', marginBottom: '3px' }} />
         </div>
-        <span className="logo-subtitle">Unique Student Homes</span>
+        <span className="logo-subtitle">peace and love</span>
       </div>
 
       {/* Stacked Tabs */}

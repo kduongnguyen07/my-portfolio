@@ -40,22 +40,20 @@ export default function IntroScreen({ onComplete }) {
   };
 
   if (step === 0) {
-    // Initial: small blue house
-    houseStyle.transform = 'translate(0, 0) scale(1) rotate(0deg)';
+    // Initial: small blue house centered by translation offset
+    houseStyle.transform = 'translate(-190px, 0px) scale(1) rotate(0deg)';
   } else if (step === 1) {
-    // Spin & scale up
-    houseStyle.transform = 'translate(0, -20px) scale(3.5) rotate(180deg)';
+    // Spin & scale up in center
+    houseStyle.transform = 'translate(-190px, -20px) scale(3.5) rotate(180deg)';
     houseStyle.fill = '#0047ff';
   } else if (step === 2) {
-    // Color shift to yellow
-    houseStyle.transform = 'translate(0, -20px) scale(3.5) rotate(180deg)';
+    // Color shift to yellow in center
+    houseStyle.transform = 'translate(-190px, -20px) scale(3.5) rotate(180deg)';
     houseStyle.fill = '#ffcc00';
     houseStyle.transition = 'fill 0.6s ease, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)';
   } else {
-    // Step 3 & 4: Shrink and slide to the 'i' dot position in "units."
-    // The "i" dot is offset to the left of the center.
-    // Let's position it precisely: offset x = -13px, y = -14px relative to center logo baseline
-    houseStyle.transform = 'translate(-6px, -15px) scale(0.6) rotate(360deg)';
+    // Step 3 & 4: Shrink and slide next to kduongnguyen07 (as the period dot)
+    houseStyle.transform = 'translate(-6px, -6px) scale(0.35) rotate(360deg)';
     houseStyle.fill = '#111111';
     houseStyle.transition = 'all 0.7s cubic-bezier(0.25, 1, 0.5, 1)';
   }
@@ -86,15 +84,15 @@ export default function IntroScreen({ onComplete }) {
             alignItems: 'flex-end', 
             height: '90px', 
             position: 'relative',
-            fontSize: '5rem',
+            fontSize: '3.6rem', // adjusted size for kduongnguyen07
             fontWeight: 800,
             color: '#111111',
-            letterSpacing: '-4px',
+            letterSpacing: '-2.5px',
             fontFamily: 'var(--font-sans)',
             lineHeight: 1
           }}
         >
-          {/* Letters "un" - Fades in at step 3 */}
+          {/* Letters "kduongnguyen07" - Fades in at step 3 */}
           <span 
             style={{ 
               opacity: step >= 3 ? 1 : 0, 
@@ -102,10 +100,10 @@ export default function IntroScreen({ onComplete }) {
               transition: 'opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s' 
             }}
           >
-            un
+            kduongnguyen07
           </span>
           
-          {/* The "i" block: has a stem (dot is our animated house!) */}
+          {/* The period dot (our animated house!) */}
           <div style={{ position: 'relative', width: '22px', height: '100%', display: 'flex', justifyContent: 'center' }}>
             
             {/* The House Dot */}
@@ -126,33 +124,7 @@ export default function IntroScreen({ onComplete }) {
                 <path d="M 25 5 L 45 22 L 45 45 L 5 45 L 5 22 Z" />
               </svg>
             </div>
-            
-            {/* The "i" Stem - Fades in at step 3 */}
-            <div 
-              style={{
-                width: '12px',
-                height: '42px',
-                background: '#111111',
-                position: 'absolute',
-                bottom: '10px',
-                opacity: step >= 3 ? 1 : 0,
-                transform: step >= 3 ? 'scaleY(1)' : 'scaleY(0)',
-                transformOrigin: 'bottom',
-                transition: 'opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s'
-              }}
-            />
           </div>
-
-          {/* Letters "ts." - Fades in at step 3 */}
-          <span 
-            style={{ 
-              opacity: step >= 3 ? 1 : 0, 
-              transform: step >= 3 ? 'translateY(0)' : 'translateY(10px)',
-              transition: 'opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s' 
-            }}
-          >
-            ts.
-          </span>
         </div>
 
         {/* Subtitle - Fades in at step 3 */}
@@ -171,7 +143,7 @@ export default function IntroScreen({ onComplete }) {
             textAlign: 'center'
           }}
         >
-          UNIQUE STUDENT HOMES
+          peace and love
         </div>
       </div>
     </div>

@@ -81,24 +81,7 @@ export default function CommunityView() {
     }
   }
 
-  const stats = [
-    { name: 'HP (Mã nguồn)', value: '2502' },
-    { name: 'ATK (Tư duy)', value: '2026' },
-    { name: 'DEF (Bảo mật)', value: '888' },
-    { name: 'SPD (Tốc độ)', value: '134' }
-  ];
 
-  const paths = [
-    { name: 'The Erudition (Tri Thức)', tier: 'Gold', detail: 'Tối đa hoá tư duy hệ thống và thuật toán AI nâng cao.' },
-    { name: 'The Nihility (Hư Vô)', tier: 'Silver', detail: 'Bẻ khóa logic, giải mã firewall và khai thác dữ liệu.' }
-  ];
-
-  const relics = [
-    { name: 'Genius Ultra-Logic Specs', slot: 'Head' },
-    { name: 'Hacker Quantum Sneakers', slot: 'Feet' },
-    { name: 'Flask Backend Circuit', slot: 'Link Rope' },
-    { name: 'Git-Core Version Control Planar', slot: 'Orb' }
-  ];
 
   const principles = [
     {
@@ -187,8 +170,8 @@ export default function CommunityView() {
               {/* Profile Avatar */}
               <div style={{ 
                 position: 'relative', 
-                width: '80px', 
-                height: '80px', 
+                width: '72px', 
+                height: '72px', 
                 borderRadius: '50%', 
                 border: '2.5px solid var(--text-main)',
                 background: 'var(--color-orange)',
@@ -197,19 +180,7 @@ export default function CommunityView() {
                 justifyContent: 'center',
                 flexShrink: 0
               }}>
-                <span style={{ fontSize: '2.2rem' }}>👾</span>
-                <div style={{
-                  position: 'absolute',
-                  bottom: '-5px',
-                  right: '-5px',
-                  background: 'var(--color-yellow)',
-                  color: 'var(--text-main)',
-                  fontSize: '0.85rem',
-                  fontWeight: 900,
-                  padding: '1px 5px',
-                  borderRadius: '3px',
-                  border: '1.5px solid var(--text-main)'
-                }}>Lv.80</div>
+                <span style={{ fontSize: '2.2rem' }}>👨‍💻</span>
               </div>
 
               <div>
@@ -217,34 +188,28 @@ export default function CommunityView() {
                   Dương Nguyên Khánh
                 </h2>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-                  PATH: THE ERUDITION | ELEMENT: QUANTUM | MSSV: 25020210
+                  Học viên K70 AI Engineer | MSSV: 25020210
                 </p>
               </div>
             </div>
 
-            {/* HP, ATK, DEF, SPD values */}
+            {/* Academic Bio */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem' }}>
-              <div style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Chỉ Số Học Tập & Năng Lực:</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem' }}>
-                {stats.map(s => (
-                  <div key={s.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0.4rem', background: '#f5f5f5', border: '1.5px solid var(--text-main)', borderRadius: '4px' }}>
-                    <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--text-muted)' }}>{s.name.split(' ')[0]}</span>
-                    <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--color-orange)', fontFamily: 'var(--font-mono)' }}>{s.value}</span>
-                  </div>
-                ))}
-              </div>
+              <div style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Giới thiệu bản thân:</div>
+              <p style={{ fontSize: '0.92rem', lineHeight: 1.5, color: 'var(--text-muted)' }}>
+                Tôi là học viên chuyên ngành Kỹ nghệ Trí tuệ Nhân tạo tại Trường Đại học Công nghệ (UET) - Đại học Quốc gia Hà Nội. Đam mê thiết kế giao diện web sáng tạo, lập trình ứng dụng tối ưu và ứng dụng các mô hình học máy vào thực tiễn.
+              </p>
             </div>
 
-            {/* Relics tools list */}
+            {/* Skills / Key Stack */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <div style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Công Cụ & Di Vật Học Tập:</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
-                {relics.map((r, idx) => (
-                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0.65rem', background: '#f5f5f5', border: '1px solid var(--text-main)', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700 }}>
-                    <span>{r.name}</span>
-                    <span style={{ color: 'var(--color-blue)', fontSize: '0.7rem' }}>[{r.slot}]</span>
-                  </div>
-                ))}
+              <div style={{ fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Công nghệ & Năng lực chính:</div>
+              <div className="tag-list">
+                <span className="tag-item" style={{ background: 'var(--color-blue)', color: '#ffffff', border: 'none' }}>Python & PyTorch</span>
+                <span className="tag-item" style={{ background: 'var(--color-yellow)', color: 'var(--text-main)', border: 'none' }}>React & Web Dev</span>
+                <span className="tag-item" style={{ background: 'var(--color-green)', color: '#ffffff', border: 'none' }}>Prompt Engineering</span>
+                <span className="tag-item" style={{ background: 'var(--color-orange)', color: '#ffffff', border: 'none' }}>Git Flow & Kanban</span>
+                <span className="tag-item" style={{ background: '#111111', color: '#ffffff', border: 'none' }}>Responsible AI</span>
               </div>
             </div>
 
