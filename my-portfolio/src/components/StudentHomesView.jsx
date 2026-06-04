@@ -11,6 +11,7 @@ export default function StudentHomesView() {
   const [activeTask, setActiveTask] = useState(null);
   const containerRef = useRef(null);
   const trackRef = useRef(null);
+  const stickyRef = useRef(null);
   const [translateX, setTranslateX] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
 
@@ -21,7 +22,6 @@ export default function StudentHomesView() {
       name: 'Máy tính & Thiết bị ngoại vi', 
       desc: 'Giả lập Terminal & Cây thư mục workspace.', 
       component: TerminalVisualizer,
-      difficulty: 'Gold T3',
       color: 'var(--color-blue)',
       image: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600'
     },
@@ -31,7 +31,6 @@ export default function StudentHomesView() {
       name: 'Google Search nâng cao', 
       desc: 'Bộ lọc toán tử tìm kiếm thông tin tối ưu.', 
       component: SearchSimulator,
-      difficulty: 'Epic T4',
       color: 'var(--color-yellow)',
       image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=600'
     },
@@ -41,7 +40,6 @@ export default function StudentHomesView() {
       name: 'Prompt & Chuỗi suy nghĩ', 
       desc: 'So sánh LLM và giả lập Chain-of-Thought.', 
       component: PromptPlayground,
-      difficulty: 'Epic T4',
       color: 'var(--color-orange)',
       image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=600'
     },
@@ -51,7 +49,6 @@ export default function StudentHomesView() {
       name: 'Sơ đồ Kanban & Phối hợp', 
       desc: 'Tự động hoá luồng Git Flow & Quản trị nhóm.', 
       component: KanbanBoard,
-      difficulty: 'Legendary T5',
       color: 'var(--color-green)',
       image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=600'
     },
@@ -61,7 +58,6 @@ export default function StudentHomesView() {
       name: 'Đồng sáng tạo nội dung', 
       desc: 'Human-in-the-loop thiết kế ảnh & văn bản.', 
       component: ContentCreation,
-      difficulty: 'Legendary T5',
       color: '#a855f7',
       image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=600'
     },
@@ -71,39 +67,59 @@ export default function StudentHomesView() {
       name: 'Đạo đức AI có trách nhiệm', 
       desc: '6 nguyên tắc cốt lõi về liêm chính học thuật.', 
       component: EthicsAI,
-      difficulty: 'Rare T2',
       color: '#ec4899',
       image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=600'
     }
   ];
 
   useEffect(() => {
+    // Find the actual scrolling parent: .content-area
+    const scrollParent = containerRef.current?.closest('.content-area') || window;
+
     const handleScroll = () => {
+      if (!containerRef.current || !trackRef.current || !stickyRef.current) return;
+
+      // On mobile, disable horizontal-scroll-jack
       if (window.innerWidth <= 768) {
         setTranslateX(0);
         return;
       }
-      if (!containerRef.current || !trackRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const viewHeight = window.innerHeight;
-      const totalScrollable = rect.height - viewHeight;
+
+      // Get container position relative to the scroll parent
+      const scrollTop = scrollParent === window
+        ? window.scrollY
+        : scrollParent.scrollTop;
+
+      const containerTop = containerRef.current.offsetTop;
+      const viewportHeight = scrollParent === window
+        ? window.innerHeight
+        : scrollParent.clientHeight;
+
+      // How far we've scrolled INTO the container (after its top edge enters viewport)
+      const scrolledInto = scrollTop - containerTop;
+
+      // Total scrollable range = container height - 1 viewport
+      const trackScrollWidth = trackRef.current.scrollWidth;
+      const viewWidth = stickyRef.current.clientWidth;
+      const maxTranslateX = Math.max(0, trackScrollWidth - viewWidth);
+
+      // Container height is set to: maxTranslateX + viewportHeight
+      // So totalScrollable matches the horizontal distance
+      const totalScrollable = maxTranslateX;
+
       if (totalScrollable <= 0) return;
 
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / totalScrollable));
-      setScrollProgress(progress);
-      
-      const contentWidth = window.innerWidth - 280; // sidebar offset
-      const maxTranslate = trackRef.current.scrollWidth - contentWidth;
-      setTranslateX(progress * Math.max(0, maxTranslate));
+      const raw = Math.max(0, Math.min(1, scrolledInto / totalScrollable));
+      setScrollProgress(raw);
+      setTranslateX(raw * maxTranslateX);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleScroll);
+    scrollParent.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll();
-    
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      scrollParent.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
@@ -111,9 +127,7 @@ export default function StudentHomesView() {
   // Escape key closes modal
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setActiveTask(null);
-      }
+      if (e.key === 'Escape') setActiveTask(null);
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -121,105 +135,186 @@ export default function StudentHomesView() {
 
   const ActiveComponent = tasks.find(t => t.id === activeTask)?.component;
 
-  // Calculates parallax scroll factor for card elements (-30px to 30px)
+  // Slight parallax offset per card based on scroll progress
   const getParallaxShift = (index) => {
     if (typeof window === 'undefined' || window.innerWidth <= 768) return 0;
-    // Map progress to card indexes (0 for Intro, 1-6 for Tasks)
-    const cardProgress = (scrollProgress * 6.8) - (index + 0.8);
-    return Math.max(-25, Math.min(25, cardProgress * 12));
+    const cardProgress = (scrollProgress * 7) - (index + 1);
+    return Math.max(-20, Math.min(20, cardProgress * 10));
   };
+
+  // Dynamic container height: enough vertical scroll to drive the full horizontal track
+  // We'll compute it based on track width, but use a fallback in CSS via state
+  const CARD_WIDTH = 380;
+  const CARD_GAP = 40;
+  const INTRO_WIDTH = 500;
+  const PADDING = 128; // left + right 4rem each = 64*2
+  const trackTotal = INTRO_WIDTH + CARD_GAP + tasks.length * (CARD_WIDTH + CARD_GAP) + PADDING;
+  // Viewport width minus sidebar (280px)
+  const viewW = typeof window !== 'undefined' ? Math.max(800, window.innerWidth - 280) : 900;
+  const maxScroll = Math.max(0, trackTotal - viewW);
+  const containerHeight = `calc(100vh + ${maxScroll}px)`;
 
   return (
     <div className="main-content">
       
-      {/* Scrollable Track Section */}
-      <div 
-        ref={containerRef} 
-        className="horizontal-scroll-container"
+      {/* Scroll-hijack outer container — tall enough to drive horizontal track */}
+      <div
+        ref={containerRef}
         style={{
           position: 'relative',
-          height: '380vh', // scroll length
+          height: containerHeight,
           background: 'var(--bg-site)'
         }}
       >
-        
-        {/* Sticky Lock Viewport */}
-        <div 
+        {/* Sticky viewport lock */}
+        <div
+          ref={stickyRef}
           style={{
             position: 'sticky',
             top: 0,
             height: '100vh',
             overflow: 'hidden',
             display: 'flex',
-            alignItems: 'center', // Vertically center the slider
-            width: '100%'
+            alignItems: 'center',
+            width: '100%',
+            background: 'var(--bg-site)'
           }}
         >
-          {/* Slider Track Wrapper */}
-          <div 
+          {/* Section label — upper left corner */}
+          <div style={{
+            position: 'absolute',
+            top: '2rem',
+            left: '4rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
+            zIndex: 10
+          }}>
+            <span style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              color: 'var(--text-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '2px'
+            }}>
+              kduongnguyen07 // 02 — Báo Cáo Thực Hành
+            </span>
+          </div>
+
+          {/* Progress bar at bottom */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '3px',
+            background: '#e0e0e0',
+            zIndex: 10
+          }}>
+            <div style={{
+              height: '100%',
+              width: `${scrollProgress * 100}%`,
+              background: 'var(--color-blue)',
+              transition: 'width 0.05s linear'
+            }} />
+          </div>
+
+          {/* Card count indicator */}
+          <div style={{
+            position: 'absolute',
+            bottom: '1.5rem',
+            right: '4rem',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.8rem',
+            fontWeight: 700,
+            color: 'var(--text-muted)',
+            zIndex: 10
+          }}>
+            {Math.min(tasks.length, Math.ceil(scrollProgress * (tasks.length + 1)))} / {tasks.length}
+          </div>
+
+          {/* Horizontal sliding track */}
+          <div
             ref={trackRef}
-            className="horizontal-scroll-track"
             style={{
               display: 'flex',
-              gap: '2.5rem',
-              padding: '0 4rem 0 4rem',
+              gap: `${CARD_GAP}px`,
+              padding: '0 4rem',
               transform: `translateX(-${translateX}px)`,
-              transition: 'transform 0.15s cubic-bezier(0.1, 0.8, 0.2, 1)',
+              transition: 'transform 0.08s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
               width: 'max-content',
               willChange: 'transform',
               alignItems: 'center'
             }}
           >
-            {/* 1. Integrated Intro Header Slide */}
+            {/* Intro slide */}
             <div
               style={{
-                width: '460px',
-                height: '520px',
+                width: `${INTRO_WIDTH - CARD_GAP}px`,
                 flexShrink: 0,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 paddingRight: '3rem',
-                borderRight: '2px dashed var(--text-muted)'
+                borderRight: '2px dashed rgba(0,0,0,0.15)'
               }}
             >
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--color-blue)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '2px' }}>
-                kduongnguyen07 // 02
+              <span style={{
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 800,
+                color: 'var(--color-blue)',
+                fontSize: '0.9rem',
+                textTransform: 'uppercase',
+                letterSpacing: '2px'
+              }}>
+                6 nhiệm vụ thực hành
               </span>
-              <h1 style={{ fontSize: '3.8rem', fontWeight: 900, letterSpacing: '-2px', marginTop: '0.5rem', lineHeight: 1.05 }}>
-                Báo Cáo Thực Hành
+              <h1 style={{
+                fontSize: '4.5rem',
+                fontWeight: 900,
+                letterSpacing: '-3px',
+                marginTop: '0.5rem',
+                lineHeight: 0.95
+              }}>
+                Báo Cáo<br/>Thực Hành
               </h1>
-              <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', marginTop: '1rem', lineHeight: 1.5 }}>
-                Tuyển tập 6 nhiệm vụ thực hành mô phỏng kỹ năng số và năng lực AI chuyên sâu. Hãy cuộn chuột sang phải để xem.
+              <p style={{
+                color: 'var(--text-muted)',
+                fontSize: '1rem',
+                marginTop: '1.25rem',
+                lineHeight: 1.6,
+                maxWidth: '340px'
+              }}>
+                Tuyển tập 6 nhiệm vụ mô phỏng kỹ năng số & năng lực AI. Cuộn chuột để lướt qua từng bài.
               </p>
-              <div 
-                style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '1rem', 
-                  marginTop: '2.5rem', 
-                  fontWeight: 800, 
-                  color: 'var(--color-blue)', 
-                  fontSize: '0.95rem',
-                  textTransform: 'uppercase'
-                }}
-              >
-                <span>Cuộn sang phải</span>
-                <ArrowRight size={20} className="pulse-arrow" />
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                marginTop: '2rem',
+                fontWeight: 800,
+                color: 'var(--color-blue)',
+                fontSize: '0.85rem',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+              }}>
+                <span>Cuộn xuống để khám phá</span>
+                <ArrowRight size={18} className="pulse-arrow" />
               </div>
             </div>
 
-            {/* 2. Tasks cards list */}
+            {/* Task cards */}
             {tasks.map((task, index) => {
               const textShift = getParallaxShift(index);
-              
+
               return (
                 <div
                   key={task.id}
                   onClick={() => setActiveTask(task.id)}
-                  className="neo-card"
+                  className="neo-card task-card"
                   style={{
-                    width: '380px',
+                    width: `${CARD_WIDTH}px`,
                     height: '520px',
                     flexShrink: 0,
                     padding: 0,
@@ -227,104 +322,96 @@ export default function StudentHomesView() {
                     background: '#ffffff',
                     cursor: 'pointer',
                     display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.transform = 'translate(-4px, -4px)';
-                    e.currentTarget.style.boxShadow = '8px 8px 0px var(--text-main)';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.transform = 'none';
-                    e.currentTarget.style.boxShadow = 'var(--shadow-offset)';
+                    flexDirection: 'column'
                   }}
                 >
-                  {/* Image wrapper with cropped parallax overflow */}
+                  {/* Image with parallax */}
                   <div style={{ width: '100%', height: '260px', position: 'relative', overflow: 'hidden' }}>
-                    <img 
-                      src={task.image} 
+                    <img
+                      src={task.image}
                       alt={task.name}
-                      style={{ 
-                        width: '120%', 
-                        height: '100%', 
+                      style={{
+                        width: '120%',
+                        height: '100%',
                         objectFit: 'cover',
                         position: 'absolute',
                         left: '-10%',
                         filter: 'grayscale(0.1) contrast(1.05)',
-                        transform: `scale(1.12) translateX(${textShift * -0.8}px)`, // Opposing slow scroll parallax
-                        transition: 'transform 0.1s linear'
+                        transform: `scale(1.12) translateX(${textShift * -0.8}px)`,
+                        transition: 'transform 0.06s linear'
                       }}
                     />
-                    {/* Badge */}
-                    <span 
-                      style={{ 
-                        position: 'absolute',
-                        top: '1.25rem',
-                        right: '1.25rem',
-                        background: 'rgba(0,0,0,0.85)',
-                        color: '#ffffff',
-                        fontSize: '0.68rem',
-                        fontWeight: 800,
-                        padding: '0.2rem 0.5rem',
-                        borderRadius: '4px',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        fontFamily: 'var(--font-mono)'
-                      }}
-                    >
-                      {task.difficulty}
+                    {/* Number badge */}
+                    <span style={{
+                      position: 'absolute',
+                      top: '1.25rem',
+                      left: '1.25rem',
+                      background: task.color,
+                      color: task.id === 'task2' ? 'var(--text-main)' : '#ffffff',
+                      fontSize: '0.75rem',
+                      fontWeight: 800,
+                      padding: '0.25rem 0.65rem',
+                      borderRadius: '4px',
+                      fontFamily: 'var(--font-mono)',
+                      border: '1.5px solid rgba(0,0,0,0.15)'
+                    }}>
+                      {task.number}
                     </span>
                   </div>
 
-                  {/* Body Info */}
-                  <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <div 
-                      style={{ 
-                        fontFamily: 'var(--font-mono)', 
-                        fontWeight: 800, 
-                        color: task.color,
-                        fontSize: '0.85rem',
-                        transform: `translateX(${textShift * 0.3}px)`,
-                        transition: 'transform 0.1s linear'
-                      }}
-                    >
-                      {task.number}
-                    </div>
-                    
-                    <h3 
-                      style={{ 
-                        fontSize: '1.45rem', 
-                        fontWeight: 900, 
-                        lineHeight: 1.25, 
-                        letterSpacing: '-0.5px',
-                        transform: `translateX(${textShift}px)`,
-                        transition: 'transform 0.1s linear'
-                      }}
-                    >
+                  {/* Body */}
+                  <div style={{
+                    padding: '1.5rem',
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem'
+                  }}>
+                    <h3 style={{
+                      fontSize: '1.5rem',
+                      fontWeight: 900,
+                      lineHeight: 1.2,
+                      letterSpacing: '-0.5px',
+                      transform: `translateX(${textShift * 0.3}px)`,
+                      transition: 'transform 0.06s linear'
+                    }}>
                       {task.name}
                     </h3>
-                    
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+
+                    <p style={{
+                      fontSize: '0.88rem',
+                      color: 'var(--text-muted)',
+                      lineHeight: 1.5
+                    }}>
                       {task.desc}
                     </p>
 
-                    {/* Launch Action triggers */}
-                    <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px', color: task.color }}>
+                    <div style={{
+                      marginTop: 'auto',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
+                    }}>
+                      <span style={{
+                        fontSize: '0.78rem',
+                        fontWeight: 800,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        color: task.color
+                      }}>
                         Chạy mô phỏng ➔
                       </span>
-                      <div 
-                        style={{ 
-                          width: '32px', 
-                          height: '32px', 
-                          borderRadius: '4px', 
-                          background: task.color, 
-                          color: task.id === 'task2' ? 'var(--text-main)' : '#ffffff',
-                          display: 'flex',
-                          alignItems: 'center', 
-                          justifyContent: 'center',
-                          border: '1.5px solid var(--text-main)'
-                        }}
-                      >
+                      <div style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '4px',
+                        background: task.color,
+                        color: task.id === 'task2' ? 'var(--text-main)' : '#ffffff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        border: '1.5px solid var(--text-main)'
+                      }}>
                         <ArrowRight size={16} />
                       </div>
                     </div>
@@ -333,18 +420,17 @@ export default function StudentHomesView() {
               );
             })}
           </div>
-
         </div>
       </div>
 
-      {/* Floating full-screen Visualizer Modal Panel Overlay */}
+      {/* Task Modal */}
       {activeTask && (
-        <div 
+        <div
           style={{
             position: 'fixed',
             inset: 0,
             zIndex: 999999,
-            background: 'rgba(0, 0, 0, 0.4)',
+            background: 'rgba(0, 0, 0, 0.5)',
             backdropFilter: 'blur(8px)',
             display: 'flex',
             alignItems: 'center',
@@ -353,8 +439,7 @@ export default function StudentHomesView() {
           }}
           onClick={() => setActiveTask(null)}
         >
-          {/* Visualizer container */}
-          <div 
+          <div
             className="neo-card animate-scale-up"
             style={{
               width: '100%',
@@ -364,23 +449,21 @@ export default function StudentHomesView() {
               padding: 0,
               display: 'flex',
               flexDirection: 'column',
-              boxShadow: 'var(--shadow-offset)',
+              boxShadow: '10px 10px 0px var(--text-main)',
               overflow: 'hidden'
             }}
             onClick={e => e.stopPropagation()}
           >
-            {/* Modal Title Header */}
-            <div 
-              style={{ 
-                padding: '1.25rem 2rem', 
-                borderBottom: '2.5px solid var(--text-main)', 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center',
-                background: tasks.find(t => t.id === activeTask)?.color,
-                color: activeTask === 'task2' ? 'var(--text-main)' : '#ffffff'
-              }}
-            >
+            {/* Modal Header */}
+            <div style={{
+              padding: '1.25rem 2rem',
+              borderBottom: '2.5px solid var(--text-main)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              background: tasks.find(t => t.id === activeTask)?.color,
+              color: activeTask === 'task2' ? 'var(--text-main)' : '#ffffff'
+            }}>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', fontFamily: 'var(--font-mono)', opacity: 0.85 }}>
                   {tasks.find(t => t.id === activeTask)?.number} // Trình giả lập
@@ -389,13 +472,11 @@ export default function StudentHomesView() {
                   {tasks.find(t => t.id === activeTask)?.name}
                 </h3>
               </div>
-
-              {/* Close Button */}
-              <button 
+              <button
                 onClick={() => setActiveTask(null)}
-                style={{ 
-                  background: 'var(--bg-card)', 
-                  border: '2px solid var(--text-main)', 
+                style={{
+                  background: 'var(--bg-card)',
+                  border: '2px solid var(--text-main)',
                   color: 'var(--text-main)',
                   width: '36px',
                   height: '36px',
@@ -420,20 +501,26 @@ export default function StudentHomesView() {
               </button>
             </div>
 
-            {/* Modal Content Scrollable Area */}
+            {/* Modal Body */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
               {ActiveComponent && <ActiveComponent />}
             </div>
 
-            {/* Modal Keyboard Esc Footer */}
-            <div style={{ padding: '0.75rem 2rem', background: '#f9f9f9', borderTop: '1.5px solid var(--text-main)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
+            {/* Modal Footer */}
+            <div style={{
+              padding: '0.75rem 2rem',
+              background: '#f9f9f9',
+              borderTop: '1.5px solid var(--text-main)',
+              fontSize: '0.75rem',
+              fontFamily: 'var(--font-mono)',
+              color: 'var(--text-muted)'
+            }}>
               Ấn [ESC] hoặc nhấp ra ngoài để đóng trình giả lập.
             </div>
           </div>
         </div>
       )}
 
-      {/* Styled css keyframes */}
       <style>{`
         @keyframes scaleUp {
           from { transform: scale(0.95); opacity: 0; }
@@ -451,21 +538,17 @@ export default function StudentHomesView() {
           50% { transform: translateX(6px); }
         }
 
-        /* Mobile specific layout overrides */
+        .task-card {
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .task-card:hover {
+          transform: translate(-4px, -4px) !important;
+          box-shadow: 8px 8px 0px var(--text-main) !important;
+        }
+
         @media (max-width: 768px) {
           .horizontal-scroll-container {
             height: auto !important;
-          }
-          .horizontal-scroll-container > div {
-            position: relative !important;
-            height: auto !important;
-          }
-          .horizontal-scroll-track {
-            overflow-x: auto !important;
-            width: 100% !important;
-            transform: none !important;
-            padding: 2rem 1.5rem !important;
-            scrollbar-width: thin;
           }
         }
       `}</style>
