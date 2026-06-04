@@ -93,7 +93,8 @@ export default function StudentHomesView() {
       const progress = Math.max(0, Math.min(1, scrolled / totalScrollable));
       setScrollProgress(progress);
       
-      const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
+      const contentWidth = window.innerWidth - 280; // sidebar offset
+      const maxTranslate = trackRef.current.scrollWidth - contentWidth;
       setTranslateX(progress * Math.max(0, maxTranslate));
     };
 
@@ -120,9 +121,11 @@ export default function StudentHomesView() {
 
   const ActiveComponent = tasks.find(t => t.id === activeTask)?.component;
 
+  // Calculates parallax scroll factor for card elements (-30px to 30px)
   const getParallaxShift = (index) => {
     if (typeof window === 'undefined' || window.innerWidth <= 768) return 0;
-    const cardProgress = scrollProgress * 5.5 - index;
+    // Map progress to card indexes (0 for Intro, 1-6 for Tasks)
+    const cardProgress = (scrollProgress * 6.8) - (index + 0.8);
     return Math.max(-25, Math.min(25, cardProgress * 12));
   };
 
@@ -135,12 +138,12 @@ export default function StudentHomesView() {
         className="horizontal-scroll-container"
         style={{
           position: 'relative',
-          height: '350vh', // sets length of scroll scrollbar
+          height: '380vh', // scroll length
           background: 'var(--bg-site)'
         }}
       >
         
-        {/* Sticky viewport lock */}
+        {/* Sticky Lock Viewport */}
         <div 
           style={{
             position: 'sticky',
@@ -148,38 +151,65 @@ export default function StudentHomesView() {
             height: '100vh',
             overflow: 'hidden',
             display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
+            alignItems: 'center', // Vertically center the slider
             width: '100%'
           }}
         >
-          {/* Section Header */}
-          <div style={{ padding: '2.5rem 3rem 0 3rem', zIndex: 10 }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--color-blue)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px' }}>
-              Bài tập dự án cá nhân (Portfolio)
-            </span>
-            <h1 style={{ fontSize: '3rem', fontWeight: 900, letterSpacing: '-1.5px', marginTop: '0.25rem', lineHeight: 1 }}>
-              Báo Cáo Thực Hành
-            </h1>
-            <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', marginTop: '0.5rem', maxWidth: '650px' }}>
-              Hãy cuộn trang để xem danh sách 6 nhiệm vụ thực hành. Nhấp chuột vào từng thẻ bài để chạy trình giả lập tương tác chi tiết.
-            </p>
-          </div>
-
-          {/* Slider Horizontal Track */}
+          {/* Slider Track Wrapper */}
           <div 
             ref={trackRef}
             className="horizontal-scroll-track"
             style={{
               display: 'flex',
               gap: '2.5rem',
-              padding: '2rem 3rem 4rem 3rem',
+              padding: '0 4rem 0 4rem',
               transform: `translateX(-${translateX}px)`,
               transition: 'transform 0.15s cubic-bezier(0.1, 0.8, 0.2, 1)',
               width: 'max-content',
-              willChange: 'transform'
+              willChange: 'transform',
+              alignItems: 'center'
             }}
           >
+            {/* 1. Integrated Intro Header Slide */}
+            <div
+              style={{
+                width: '460px',
+                height: '520px',
+                flexShrink: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                paddingRight: '3rem',
+                borderRight: '2px dashed var(--text-muted)'
+              }}
+            >
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--color-blue)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '2px' }}>
+                kduongnguyen07 // 02
+              </span>
+              <h1 style={{ fontSize: '3.8rem', fontWeight: 900, letterSpacing: '-2px', marginTop: '0.5rem', lineHeight: 1.05 }}>
+                Báo Cáo Thực Hành
+              </h1>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', marginTop: '1rem', lineHeight: 1.5 }}>
+                Tuyển tập 6 nhiệm vụ thực hành mô phỏng kỹ năng số và năng lực AI chuyên sâu. Hãy cuộn chuột sang phải để xem.
+              </p>
+              <div 
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '1rem', 
+                  marginTop: '2.5rem', 
+                  fontWeight: 800, 
+                  color: 'var(--color-blue)', 
+                  fontSize: '0.95rem',
+                  textTransform: 'uppercase'
+                }}
+              >
+                <span>Cuộn sang phải</span>
+                <ArrowRight size={20} className="pulse-arrow" />
+              </div>
+            </div>
+
+            {/* 2. Tasks cards list */}
             {tasks.map((task, index) => {
               const textShift = getParallaxShift(index);
               
@@ -190,37 +220,47 @@ export default function StudentHomesView() {
                   className="neo-card"
                   style={{
                     width: '380px',
-                    height: '420px',
+                    height: '520px',
                     flexShrink: 0,
                     padding: 0,
                     overflow: 'hidden',
                     background: '#ffffff',
                     cursor: 'pointer',
                     display: 'flex',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = 'translate(-4px, -4px)';
+                    e.currentTarget.style.boxShadow = '8px 8px 0px var(--text-main)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = 'var(--shadow-offset)';
                   }}
                 >
-                  {/* Curried Image Header */}
-                  <div style={{ width: '100%', height: '200px', position: 'relative', overflow: 'hidden' }}>
+                  {/* Image wrapper with cropped parallax overflow */}
+                  <div style={{ width: '100%', height: '260px', position: 'relative', overflow: 'hidden' }}>
                     <img 
                       src={task.image} 
                       alt={task.name}
                       style={{ 
-                        width: '100%', 
+                        width: '120%', 
                         height: '100%', 
                         objectFit: 'cover',
+                        position: 'absolute',
+                        left: '-10%',
                         filter: 'grayscale(0.1) contrast(1.05)',
-                        transition: 'transform 0.4s ease'
+                        transform: `scale(1.12) translateX(${textShift * -0.8}px)`, // Opposing slow scroll parallax
+                        transition: 'transform 0.1s linear'
                       }}
-                      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-                      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
                     />
                     {/* Badge */}
                     <span 
                       style={{ 
                         position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
+                        top: '1.25rem',
+                        right: '1.25rem',
                         background: 'rgba(0,0,0,0.85)',
                         color: '#ffffff',
                         fontSize: '0.68rem',
@@ -235,7 +275,7 @@ export default function StudentHomesView() {
                     </span>
                   </div>
 
-                  {/* Body Text Info */}
+                  {/* Body Info */}
                   <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     <div 
                       style={{ 
@@ -267,7 +307,7 @@ export default function StudentHomesView() {
                       {task.desc}
                     </p>
 
-                    {/* Launch Action */}
+                    {/* Launch Action triggers */}
                     <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px', color: task.color }}>
                         Chạy mô phỏng ➔
@@ -393,7 +433,7 @@ export default function StudentHomesView() {
         </div>
       )}
 
-      {/* Styled css keyframes for scaling modal */}
+      {/* Styled css keyframes */}
       <style>{`
         @keyframes scaleUp {
           from { transform: scale(0.95); opacity: 0; }
@@ -403,7 +443,15 @@ export default function StudentHomesView() {
           animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Mobile specific layout */
+        .pulse-arrow {
+          animation: pulseArrow 1.5s infinite ease-in-out;
+        }
+        @keyframes pulseArrow {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(6px); }
+        }
+
+        /* Mobile specific layout overrides */
         @media (max-width: 768px) {
           .horizontal-scroll-container {
             height: auto !important;
@@ -416,7 +464,7 @@ export default function StudentHomesView() {
             overflow-x: auto !important;
             width: 100% !important;
             transform: none !important;
-            padding: 1.5rem !important;
+            padding: 2rem 1.5rem !important;
             scrollbar-width: thin;
           }
         }
