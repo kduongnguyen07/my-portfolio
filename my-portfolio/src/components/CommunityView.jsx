@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, ShieldCheck, CheckSquare, BookOpen, UserX, AlertTriangle, Cpu, Award } from 'lucide-react';
+import { DraggableCardBody, DraggableCardContainer } from './DraggableCard';
+import EvervaultCard from './EvervaultCard';
 
 export default function CommunityView() {
   const cols = 16;
@@ -215,31 +217,40 @@ export default function CommunityView() {
 
           </div>
 
-          {/* Animated Pixel Eye Grid Panel */}
-          <div className="neo-card" style={{ background: '#ffffff', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontWeight: 800, fontSize: '1.05rem', textTransform: 'uppercase' }}>Digital System Active State</span>
-              <span className="tag-item" style={{ background: 'var(--color-orange)', color: '#ffffff', border: 'none' }}>
-                {frame === 0 && 'Eye Closed'}
-                {frame === 1 && 'Eye Opened'}
-                {frame === 2 && 'Eye Winking'}
-                {frame === 3 && 'Mouth Idle'}
-                {frame === 4 && 'Smiling'}
-                {frame === 5 && 'Happy Face'}
-              </span>
-            </div>
-
-            <div 
-              style={{
-                display: 'grid',
-                gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                borderTop: '2px solid var(--text-main)',
-                borderLeft: '2px solid var(--text-main)',
-                background: 'var(--color-orange)'
-              }}
-            >
-              {gridCells}
-            </div>
+          {/* Evervault Hacker Glitch Dashboard (Digital System Active State replacement) */}
+          <div style={{ height: '315px' }}>
+            <EvervaultCard>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', height: '100%', justifyContent: 'center' }}>
+                <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--color-orange)', textTransform: 'uppercase', letterSpacing: '2px' }}>
+                  // SYSTEM DECRYPTION ACTIVE
+                </div>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1.1, color: 'var(--text-main)' }}>
+                  Hệ chỉ số kỹ thuật của học viên
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', marginTop: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>STUDENT_ID:</span>
+                    <span style={{ fontWeight: 800, color: 'var(--text-main)' }}>25020210</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>CLASS_CODE:</span>
+                    <span style={{ fontWeight: 800, color: 'var(--text-main)' }}>K70_AI_ENGINEER</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>GIT_COMMITS:</span>
+                    <span style={{ fontWeight: 800, color: 'var(--color-green)' }}>148_VERIFIED</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>PROMPT_CHAIN_ACCURACY:</span>
+                    <span style={{ fontWeight: 800, color: 'var(--color-blue)' }}>99.2%</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>AI_ETHICS_ALIGNMENT:</span>
+                    <span style={{ fontWeight: 800, color: '#ec4899' }}>COMPLIANT</span>
+                  </div>
+                </div>
+              </div>
+            </EvervaultCard>
           </div>
 
         </div>
@@ -357,6 +368,80 @@ export default function CommunityView() {
           </div>
         </div>
 
+      </section>
+
+      {/* Draggable Cards Pile Gallery */}
+      <section style={{ padding: '0 3rem 3rem 3rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text-main)', textTransform: 'uppercase' }}>
+              Kho Ảnh Kỷ Niệm & Dự Án
+            </h2>
+            <p style={{ color: 'var(--text-main)', opacity: 0.85, fontSize: '1.1rem', marginTop: '0.25rem' }}>
+              Nhấp và kéo để di chuyển, ném các thẻ ảnh minh chứng thực hành và hoạt động nghiên cứu AI K70 UET.
+            </p>
+          </div>
+
+          <div style={{
+            border: '2.5px solid var(--text-main)',
+            borderRadius: '8px',
+            background: 'rgba(255, 255, 255, 0.2)',
+            boxShadow: 'var(--shadow-offset)',
+            overflow: 'hidden',
+            position: 'relative',
+            height: '620px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%'
+          }}>
+            <DraggableCardContainer className="relative w-full h-full">
+              {[
+                {
+                  title: "Bài 1: Cấu trúc Workspace",
+                  image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=80&w=600",
+                  style: { position: "absolute", top: "100px", left: "8%", transform: "rotate(-6deg)" },
+                },
+                {
+                  title: "Bài 2: Google Search Nâng cao",
+                  image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=600",
+                  style: { position: "absolute", top: "130px", left: "20%", transform: "rotate(4deg)" },
+                },
+                {
+                  title: "Bài 3: Prompt & Chuỗi suy nghĩ CoT",
+                  image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600",
+                  style: { position: "absolute", top: "90px", left: "32%", transform: "rotate(-8deg)" },
+                },
+                {
+                  title: "Bài 4: Quản lý Kanban & Git Flow",
+                  image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=600",
+                  style: { position: "absolute", top: "140px", left: "45%", transform: "rotate(7deg)" },
+                },
+                {
+                  title: "Bài 5: Đồng sáng tạo nội dung AI",
+                  image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=600",
+                  style: { position: "absolute", top: "80px", left: "58%", transform: "rotate(-3deg)" },
+                },
+                {
+                  title: "Bài 6: Đạo đức AI có trách nhiệm",
+                  image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=600",
+                  style: { position: "absolute", top: "120px", left: "70%", transform: "rotate(5deg)" },
+                },
+                {
+                  title: "Tập thể K70 AI Engineers",
+                  image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600",
+                  style: { position: "absolute", top: "110px", left: "38%", transform: "rotate(2deg)" },
+                  className: "z-20",
+                }
+              ].map((item) => (
+                <DraggableCardBody key={item.title} className={item.className} style={item.style}>
+                  <img src={item.image} alt={item.title} className="draggable-card-img" />
+                  <h3 className="draggable-card-title">{item.title}</h3>
+                </DraggableCardBody>
+              ))}
+            </DraggableCardContainer>
+          </div>
+        </div>
       </section>
 
       {/* Footer Banner */}

@@ -34,12 +34,19 @@ export default function Sidebar({ activeTab, setActiveTab }) {
 
       {/* Booking button block (visible on desktop) */}
       <div className="sidebar-booking-section">
-        <button 
-          className="btn-book-unit"
+        <div 
+          className="hover-border-gradient-wrapper" 
           onClick={() => setActiveTab('contact')}
+          style={{ width: '100%', padding: '2.5px', background: 'var(--text-main)', borderRadius: '6px' }}
         >
-          Liên hệ hợp tác
-        </button>
+          <div className="hover-border-gradient-glow" />
+          <button 
+            className="hover-border-gradient-btn"
+            style={{ background: 'var(--color-green)', color: 'var(--text-main)', width: '100%', border: 'none' }}
+          >
+            Liên hệ hợp tác
+          </button>
+        </div>
 
         <div className="sidebar-footer">
           <a href="#lang" className="lang-switch" onClick={(e) => { e.preventDefault(); alert("Đã chuyển đổi ngôn ngữ! (Tiếng Việt)"); }}>

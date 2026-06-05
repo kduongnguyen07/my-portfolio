@@ -65,7 +65,7 @@ html, body {
   display: flex;
   min-height: 100vh;
   position: relative;
-  background-color: var(--bg-site);
+  background-color: transparent;
 }
 
 /* Sidebar Styling - Color Blocked Neo-Brutalist */
@@ -237,7 +237,8 @@ html, body {
   height: 100vh;
   overflow-y: auto;
   position: relative;
-  background-color: var(--bg-site);
+  background-color: transparent;
+  z-index: 1;
 }
 
 .main-content {
@@ -661,3 +662,271 @@ html, body {
     gap: 0.75rem;
   }
 }
+
+/* --- Aceternity UI Components Styling --- */
+
+/* Draggable Cards Gallery */
+.draggable-card-container {
+  perspective: 3000px;
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.draggable-card-body {
+  position: relative;
+  min-height: 380px;
+  width: 290px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: var(--bg-card);
+  padding: 1.25rem;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-offset);
+  transform-style: preserve-3d;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: grab;
+  user-select: none;
+}
+
+.draggable-card-body:active {
+  cursor: grabbing;
+}
+
+.draggable-card-body:hover {
+  box-shadow: var(--shadow-offset-hover);
+}
+
+.draggable-card-img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 4px;
+  pointer-events: none;
+  border: var(--border-thin);
+}
+
+.draggable-card-title {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  pointer-events: none;
+}
+
+/* Evervault Matrix Card */
+.evervault-card-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  background-color: var(--text-main);
+  border: var(--border-thick);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-offset);
+  cursor: pointer;
+}
+
+.evervault-card-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: rgba(255, 102, 0, 0.15); /* orange matrix tone */
+  word-break: break-all;
+  user-select: none;
+  pointer-events: none;
+  overflow: hidden;
+  padding: 8px;
+  opacity: 0.8;
+}
+
+.evervault-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle 160px at var(--mouse-x, 0) var(--mouse-y, 0),
+    rgba(255, 102, 0, 0.25) 0%,
+    rgba(255, 204, 0, 0.05) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.evervault-card-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    circle 160px at var(--mouse-x, 0) var(--mouse-y, 0),
+    rgba(255, 102, 0, 0.6) 0%,
+    rgba(255, 204, 0, 0.1) 45%,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.3s ease;
+}
+
+.evervault-card-container:hover .evervault-card-glow {
+  opacity: 1;
+}
+
+.evervault-card-content {
+  position: relative;
+  z-index: 3;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  background: rgba(255, 255, 255, 0.95);
+  border: var(--border-thin);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.evervault-card-container:hover .evervault-card-content {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: var(--color-orange);
+}
+
+/* Hover Border Gradient */
+.hover-border-gradient-wrapper {
+  position: relative;
+  border-radius: 6px;
+  padding: 2.5px;
+  overflow: hidden;
+  background: var(--text-main);
+  display: inline-block;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.hover-border-gradient-glow {
+  position: absolute;
+  inset: -50%;
+  z-index: -1;
+  background: conic-gradient(
+    from 90deg,
+    var(--color-blue) 0%,
+    var(--color-orange) 25%,
+    var(--color-yellow) 50%,
+    var(--color-green) 75%,
+    var(--color-blue) 100%
+  );
+  animation: rotateGrad 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hover-border-gradient-wrapper:hover .hover-border-gradient-glow {
+  opacity: 1;
+}
+
+@keyframes rotateGrad {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hover-border-gradient-btn {
+  background: var(--bg-card);
+  border: none;
+  border-radius: 4px;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-weight: 800;
+  padding: 0.75rem 1.5rem;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+}
+
+.hover-border-gradient-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* Aurora Fluid Gradient Background Animation */
+@keyframes auroraMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.aurora-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(
+    270deg,
+    rgba(0, 71, 255, 0.04) 0%,
+    rgba(255, 102, 0, 0.03) 30%,
+    rgba(0, 204, 102, 0.03) 60%,
+    rgba(255, 204, 0, 0.03) 90%,
+    rgba(0, 71, 255, 0.04) 100%
+  );
+  background-size: 400% 400%;
+  animation: auroraMove 24s ease infinite;
+  pointer-events: none;
+}
+
+/* 3D Cyber Grid Space Background */
+.cyber-grid-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.8) 0%, var(--bg-site) 80%);
+}
+
+.cyber-grid-3d {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  left: -50%;
+  bottom: -50%;
+  background-image: 
+    linear-gradient(to right, rgba(0, 71, 255, 0.06) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(0, 71, 255, 0.06) 1.5px, transparent 1.5px);
+  background-size: 55px 55px;
+  transform: perspective(300px) rotateX(72deg);
+  transform-origin: 50% 100%;
+  will-change: background-position;
+}
+
+.cyber-grid-horizon {
+  position: absolute;
+  bottom: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(0, 71, 255, 0.15) 30%, rgba(0, 71, 255, 0.15) 70%, transparent);
+}
+

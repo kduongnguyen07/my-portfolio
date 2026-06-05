@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Shield, Smartphone, HeartHandshake, Users, ArrowRight, MapPin, Eye, Compass, Heart } from 'lucide-react';
+import SpotlightCard from './SpotlightCard';
+import TextGenerateEffect from './TextGenerateEffect';
+
 
 // A local helper component for the interactive 12x12 pixel art grids
 function PixelGridCanvas({ preset, color }) {
@@ -124,17 +127,25 @@ export default function HomeView({ setActiveTab }) {
             className="hero-image"
           />
           <div className="hero-overlay">
-            <h1 className="hero-title">Cổng Thông Tin Học Viên K70 AI Engineer</h1>
-            <p className="hero-subtitle">
-              Hệ thống báo cáo học tập, tích hợp 6 nhiệm vụ lập trình thực tế, lộ trình phát triển và tuyên ngôn đạo đức AI của Dương Nguyên Khánh (MSSV: 25020210).
-            </p>
-            <button 
-              className="btn-book-unit hero-btn"
+            <h1 className="hero-title">
+              <TextGenerateEffect words="Cổng Thông Tin Học Viên K70 AI Engineer" />
+            </h1>
+            <div className="hero-subtitle">
+              <TextGenerateEffect words="Hệ thống báo cáo học tập, tích hợp 6 nhiệm vụ lập trình thực tế, lộ trình phát triển và tuyên ngôn đạo đức AI của Dương Nguyên Khánh (MSSV: 25020210)." duration={0.4} />
+            </div>
+            <div 
+              className="hover-border-gradient-wrapper hero-btn" 
               onClick={() => setActiveTab('rooms')}
-              style={{ background: 'var(--color-blue)', color: '#ffffff' }}
+              style={{ padding: '2.5px', background: 'var(--text-main)', display: 'inline-block', borderRadius: '6px' }}
             >
-              Báo Cáo Thực Hành
-            </button>
+              <div className="hover-border-gradient-glow" />
+              <button 
+                className="hover-border-gradient-btn"
+                style={{ background: 'var(--color-blue)', color: '#ffffff' }}
+              >
+                Báo Cáo Thực Hành
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -254,7 +265,7 @@ export default function HomeView({ setActiveTab }) {
           <div className="neo-grid-4">
             
             {/* Card 1: Tư duy hệ thống */}
-            <div className="neo-card">
+            <SpotlightCard spotlightColor="rgba(0, 71, 255, 0.08)">
               <div style={{ background: 'rgba(0, 71, 255, 0.1)', color: 'var(--color-blue)', padding: '0.6rem', borderRadius: '6px', alignSelf: 'flex-start' }}>
                 <Users size={24} />
               </div>
@@ -262,10 +273,10 @@ export default function HomeView({ setActiveTab }) {
               <p className="card-text" style={{ fontSize: '0.9rem' }}>
                 Quản lý cấu trúc cây thư mục và không gian làm việc khoa học, gọn gàng, dễ mở rộng.
               </p>
-            </div>
+            </SpotlightCard>
 
             {/* Card 2: Quy trình chuyên nghiệp */}
-            <div className="neo-card">
+            <SpotlightCard spotlightColor="rgba(255, 102, 0, 0.08)">
               <div style={{ background: 'rgba(255, 102, 0, 0.1)', color: 'var(--color-orange)', padding: '0.6rem', borderRadius: '6px', alignSelf: 'flex-start' }}>
                 <Shield size={24} />
               </div>
@@ -273,10 +284,10 @@ export default function HomeView({ setActiveTab }) {
               <p className="card-text" style={{ fontSize: '0.9rem' }}>
                 Quản trị dự án qua sơ đồ Kanban và phân chia các luồng Git Flow cộng tác tối ưu.
               </p>
-            </div>
+            </SpotlightCard>
 
             {/* Card 3: Kỹ nghệ câu lệnh */}
-            <div className="neo-card">
+            <SpotlightCard spotlightColor="rgba(0, 204, 102, 0.08)">
               <div style={{ background: 'rgba(0, 204, 102, 0.1)', color: 'var(--color-green)', padding: '0.6rem', borderRadius: '6px', alignSelf: 'flex-start' }}>
                 <Smartphone size={24} />
               </div>
@@ -284,10 +295,10 @@ export default function HomeView({ setActiveTab }) {
               <p className="card-text" style={{ fontSize: '0.9rem' }}>
                 Thiết kế câu lệnh cấu trúc logic, áp dụng kỹ thuật CoT giúp tăng hiệu năng làm việc với LLM.
               </p>
-            </div>
+            </SpotlightCard>
 
             {/* Card 4: Đạo đức AI */}
-            <div className="neo-card">
+            <SpotlightCard spotlightColor="rgba(255, 204, 0, 0.12)">
               <div style={{ background: 'rgba(255, 204, 0, 0.15)', color: '#b28f00', padding: '0.6rem', borderRadius: '6px', alignSelf: 'flex-start' }}>
                 <HeartHandshake size={24} />
               </div>
@@ -295,7 +306,7 @@ export default function HomeView({ setActiveTab }) {
               <p className="card-text" style={{ fontSize: '0.9rem' }}>
                 Tuân thủ nghiêm ngặt 6 tiêu chuẩn đạo đức AI, chịu trách nhiệm giải trình và bảo mật thông tin.
               </p>
-            </div>
+            </SpotlightCard>
 
           </div>
         </div>

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import IntroScreen from './components/IntroScreen';
 import Sidebar from './components/Sidebar';
 import HomeView from './components/HomeView';
+import BackgroundBeams from './components/BackgroundBeams';
+import SparklesCore from './components/SparklesCore';
+
 import StudentHomesView from './components/StudentHomesView';
 import OurWayOfLivingView from './components/OurWayOfLivingView';
 import CommunityView from './components/CommunityView';
@@ -133,6 +136,9 @@ export default function App() {
       {/* 3. Main Site Layout */}
       {!showIntro && (
         <>
+          <div className="aurora-bg" />
+          <BackgroundBeams />
+          <SparklesCore />
           <Sidebar activeTab={activeTab} setActiveTab={selectTab} />
           
           <div className="content-area">

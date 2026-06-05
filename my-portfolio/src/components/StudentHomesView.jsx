@@ -6,14 +6,130 @@ import PromptPlayground from './PromptPlayground';
 import KanbanBoard from './KanbanBoard';
 import ContentCreation from './ContentCreation';
 import EthicsAI from './EthicsAI';
+import SpotlightCard from './SpotlightCard';
+
+const getSpotlightColor = (color) => {
+  if (color === 'var(--color-blue)') return 'rgba(0, 71, 255, 0.08)';
+  if (color === 'var(--color-yellow)') return 'rgba(255, 204, 0, 0.12)';
+  if (color === 'var(--color-orange)') return 'rgba(255, 102, 0, 0.08)';
+  if (color === 'var(--color-green)') return 'rgba(0, 204, 102, 0.08)';
+  if (color === '#a855f7') return 'rgba(168, 85, 247, 0.08)';
+  if (color === '#ec4899') return 'rgba(236, 72, 153, 0.08)';
+  return 'rgba(0, 71, 255, 0.06)';
+};
+
+const TASK_REPORTS = {
+  task1: {
+    title: "Báo cáo Bài 1: Quản lý Workspace với File & Thư mục",
+    objective: "Xây dựng cấu trúc thư mục workspace chuyên nghiệp, sử dụng Terminal và các lệnh CLI (Command Line Interface) để quản lý tệp tin hiệu quả theo tiêu chuẩn công nghiệp.",
+    steps: [
+      "Thiết kế cây thư mục: Thiết lập các phân nhánh chuẩn hóa (src/, docs/, assets/, config/, tests/) với quy tắc đặt tên snake_case.",
+      "Thao tác CLI: Luyện tập thành thạo các lệnh di chuyển và quản lý tệp (mkdir, cd, ls, mv, cp, rm, find, grep).",
+      "Tối ưu hóa: Tạo các alias phím tắt và viết shell script đơn giản để tự động hóa quy trình nén, sao lưu dữ liệu học tập."
+    ],
+    evidence: [
+      { url: "/evidence/phong/bai1_1.jpg", caption: "Cây thư mục Workspace hiển thị trên Terminal" },
+      { url: "/evidence/hoangnam/lesson1/image1.png", caption: "Giao diện cấu trúc thư mục chi tiết trên VS Code" },
+      { url: "/evidence/hoangnam/lesson1/image2.png", caption: "Kiểm tra kích thước các thư mục bằng lệnh CLI" },
+      { url: "/evidence/hoangnam/lesson1/image3.png", caption: "Script tự động hóa sao lưu thư mục workspace" }
+    ],
+    result: "Cấu trúc thư mục học tập được quy chuẩn hóa, dễ dàng tích hợp vào hệ thống kiểm soát phiên bản Git và chia sẻ đồng bộ."
+  },
+  task2: {
+    title: "Báo cáo Bài 2: Google Search Nâng cao & Đánh giá học thuật",
+    objective: "Sử dụng các toán tử tìm kiếm nâng cao (Search Operators) để lọc thông tin chính xác, đồng thời áp dụng tiêu chuẩn CRAAP để đánh giá tính xác thực của nguồn tài liệu giáo khoa.",
+    steps: [
+      "Khai thác toán tử: Sử dụng site:edu, filetype:pdf, intitle:\"...\" để quét trực tiếp các nghiên cứu khoa học chính thống.",
+      "Đánh giá CRAAP Test: Kiểm chứng 5 khía cạnh cốt lõi (Cập nhật, Liên quan, Thẩm quyền, Chính xác, Mục đích).",
+      "Harvard Referencing: Định dạng và sắp xếp danh mục tài liệu tham khảo theo quy chuẩn học thuật quốc tế."
+    ],
+    evidence: [
+      { url: "/evidence/phong/bai2_1.jpg", caption: "Tìm kiếm tài liệu học thuật với toán tử nâng cao" },
+      { url: "/evidence/phong/bai2_2.jpg", caption: "Định dạng danh mục tài liệu tham khảo chuẩn Harvard" }
+    ],
+    tableData: [
+      { name: "AI and the Future of Learning (UNESCO, 2024)", type: "Báo cáo tổ chức", score: "5/5", analysis: "Ưu: Tính cập nhật cao, được thẩm định bởi hội đồng chuyên gia thế giới. Nhược: Mang tính định hướng vĩ mô, thiếu các hướng dẫn kỹ thuật chi tiết." },
+      { name: "Personalized Learning Paths via AI (Tạp chí IEEE)", type: "Bài báo khoa học", score: "5/5", analysis: "Ưu: Sử dụng phương pháp nghiên cứu thực nghiệm với cỡ mẫu lớn (5000 sinh viên). Nhược: Từ ngữ chuyên ngành phức tạp." },
+      { name: "Artificial Intelligence in Education (Springer XB)", type: "Sách chuyên khảo", score: "5/5", analysis: "Ưu: Hệ thống hóa lý thuyết bài bản, nền tảng tốt. Nhược: Quy trình xuất bản dài nên thiếu cập nhật một số AI mới nhất." },
+      { name: "Thực trạng dùng ChatGPT của sinh viên VN", type: "Báo chí điện tử", score: "3/5", analysis: "Ưu: Số liệu gần gũi với thực tế địa phương. Nhược: Sai số khảo sát online cao, thiếu phản biện đồng cấp." }
+    ],
+    result: "Tổng hợp thành công danh mục 10 nguồn tài liệu tham khảo chất lượng cao kèm theo bảng điểm đánh giá độ tin cậy khoa học."
+  },
+  task3: {
+    title: "Báo cáo Bài 3: Kỹ nghệ Prompt & Chuỗi suy nghĩ Chain-of-Thought",
+    objective: "Thiết kế, thử nghiệm và tối ưu hóa các prompt câu lệnh với kỹ thuật CoT giúp tăng chất lượng câu trả lời của mô hình ngôn ngữ lớn (LLM).",
+    steps: [
+      "So sánh Zero-shot vs Few-shot: Cung cấp ví dụ mẫu để mô hình định hình cấu trúc đầu ra chuẩn xác.",
+      "Áp dụng Chain-of-Thought: Thêm khẩu lệnh logic 'Hãy suy nghĩ từng bước một' để AI giải thích quy trình giải quyết vấn đề.",
+      "Thiết lập Ràng buộc (Constraints): Giới hạn vai trò chuyên gia, định dạng Markdown và các rubric kiểm thử chất lượng."
+    ],
+    evidence: [
+      { url: "/evidence/phong/bai3_1.jpg", caption: "So sánh kết quả Prompt cơ bản và Prompt nâng cao" },
+      { url: "/evidence/phong/bai3_2.jpg", caption: "Giả lập chuỗi suy nghĩ CoT giải bài toán logic" },
+      { url: "/evidence/hoangnam/lesson3/image1.png", caption: "Rubric chấm điểm phản hồi của LLM" }
+    ],
+    result: "Bộ nguyên tắc C.A.R.E (Context - Action - Result - Example) được đúc kết giúp nâng cao 80% độ hữu dụng của văn bản phản hồi."
+  },
+  task4: {
+    title: "Báo cáo Bài 4: Hợp tác dự án với Kanban & Git Flow",
+    objective: "Tổ chức quy trình làm việc nhóm trực tuyến hiệu quả thông qua sơ đồ Kanban và chuẩn hóa phân nhánh Git Flow hỗ trợ AI-assisted workflows.",
+    steps: [
+      "Quản lý Kanban: Phân bổ 5 cột trạng thái (Backlog -> Todo -> In Progress -> Review -> Done) và đặt giới hạn WIP.",
+      "Phân nhánh Git Flow: Thiết lập nhánh develop, main và các nhánh feature/*, hotfix/* để tránh xung đột mã nguồn.",
+      "Đồng bộ lưu trữ: Kết nối Google Drive lưu trữ tài liệu với các thẻ nhiệm vụ trên Trello."
+    ],
+    evidence: [
+      { url: "/evidence/phong/bai4_1.jpg", caption: "Sơ đồ quản trị Kanban dự án nhóm trên Trello" },
+      { url: "/evidence/hoangnam/lesson4/image1.jpeg", caption: "Nhật ký họp thảo luận chuyên môn trực tuyến" },
+      { url: "/evidence/hoangnam/lesson4/image2.png", caption: "Lịch sử chỉnh sửa tài liệu chung trên Google Docs" },
+      { url: "/evidence/hoangnam/lesson4/image3.png", caption: "Cấu trúc lưu trữ thư mục dùng chung trên Google Drive" }
+    ],
+    result: "Quy trình làm việc nhóm đạt hiệu suất cao, triệt tiêu tình trạng trôi tin nhắn hoặc xung đột phiên bản tệp tin."
+  },
+  task5: {
+    title: "Báo cáo Bài 5: Đồng sáng tạo nội dung AI (Human-in-the-Loop)",
+    objective: "Thiết kế sản phẩm đồ họa truyền thông (Infographic) thông qua quy trình kết hợp trí tuệ con người dẫn dắt và AI hỗ trợ tạo sinh hình ảnh/văn bản.",
+    steps: [
+      "Biên tập kịch bản: Sử dụng Gemini tạo văn bản thô, chỉnh sửa số liệu và bối cảnh phù hợp thực tế.",
+      "Tạo ảnh Isometric: Sử dụng prompt Midjourney/Leonardo tạo các icon 3D claymorphism nghệ thuật.",
+      "Hòa hợp thiết kế: Sử dụng Canva AI tách nền, hiệu chỉnh bảng màu khớp với template thiết kế gốc."
+    ],
+    evidence: [
+      { url: "/evidence/phong/bai5_1.jpg", caption: "Dự thảo Infographic thô tạo sinh từ AI" },
+      { url: "/evidence/hoangnam/lesson5/image3.png", caption: "Sản phẩm Infographic 3D Isometric hoàn thiện" }
+    ],
+    result: "Sản phẩm truyền thông đạt tính thẩm mỹ cao, kết hợp hài hòa giữa chất lượng đồ họa AI và chiều sâu nội dung con người biên tập."
+  },
+  task6: {
+    title: "Báo cáo Bài 6: Đạo đức AI & Liêm chính học thuật có trách nhiệm",
+    objective: "Xây dựng tuyên ngôn đạo đức sử dụng trí tuệ nhân tạo cá nhân, tuân thủ 6 nguyên tắc liêm chính học thuật trong nghiên cứu công nghệ.",
+    steps: [
+      "Phân tích Đạo đức: Nhận diện định kiến, bảo mật thông tin và quyền riêng tư dữ liệu cá nhân.",
+      "Nghiên cứu Chính sách: Khảo sát quy định sử dụng AI tại UET, ĐHQGHN và các trường đại học toàn cầu.",
+      "Checklist liêm chính: Thiết lập 20 tiêu chí kiểm soát việc tham khảo ý tưởng AI một cách minh bạch."
+    ],
+    evidence: [
+      { url: "/evidence/phong/bai6_1.jpg", caption: "Tuyên ngôn Đạo đức AI cá nhân đính kèm chữ ký" },
+      { url: "/evidence/hoangnam/lesson6/image1.png", caption: "Sơ đồ 6 nguyên tắc Đạo đức AI có trách nhiệm" },
+      { url: "/evidence/hoangnam/lesson6/image2.png", caption: "Quy trình đối chiếu nguồn tham khảo chống đạo văn" }
+    ],
+    result: "Xác lập ranh giới rõ ràng giữa 'hỗ trợ học tập' và 'lệ thuộc máy móc', cam kết chịu trách nhiệm giải trình cuối cùng đối với mọi sản phẩm."
+  }
+};
+
 
 export default function StudentHomesView() {
   const [activeTask, setActiveTask] = useState(null);
+  const [modalTab, setModalTab] = useState('simulator');
   const containerRef = useRef(null);
   const trackRef = useRef(null);
   const stickyRef = useRef(null);
   const [translateX, setTranslateX] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    setModalTab('simulator');
+  }, [activeTask]);
 
   const tasks = [
     { 
@@ -163,7 +279,7 @@ export default function StudentHomesView() {
         style={{
           position: 'relative',
           height: containerHeight,
-          background: 'var(--bg-site)'
+          background: 'transparent'
         }}
       >
         {/* Sticky viewport lock */}
@@ -177,9 +293,19 @@ export default function StudentHomesView() {
             display: 'flex',
             alignItems: 'center',
             width: '100%',
-            background: 'var(--bg-site)'
+            background: 'transparent'
           }}
         >
+          {/* Animated 3D Perspective Grid Background */}
+          <div className="cyber-grid-container">
+            <div 
+              className="cyber-grid-3d" 
+              style={{
+                backgroundPosition: `${-translateX * 0.4}px 0px`,
+              }}
+            />
+            <div className="cyber-grid-horizon" />
+          </div>
           {/* Section label — upper left corner */}
           <div style={{
             position: 'absolute',
@@ -309,10 +435,11 @@ export default function StudentHomesView() {
               const textShift = getParallaxShift(index);
 
               return (
-                <div
+                <SpotlightCard
                   key={task.id}
                   onClick={() => setActiveTask(task.id)}
-                  className="neo-card task-card"
+                  className="task-card"
+                  spotlightColor={getSpotlightColor(task.color)}
                   style={{
                     width: `${CARD_WIDTH}px`,
                     height: '520px',
@@ -416,7 +543,7 @@ export default function StudentHomesView() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </SpotlightCard>
               );
             })}
           </div>
@@ -501,9 +628,167 @@ export default function StudentHomesView() {
               </button>
             </div>
 
+            {/* Modal Tab Bar */}
+            <div style={{
+              display: 'flex',
+              borderBottom: '2.5px solid var(--text-main)',
+              background: '#f5f5f5',
+            }}>
+              <button
+                onClick={() => setModalTab('simulator')}
+                style={{
+                  background: modalTab === 'simulator' ? '#ffffff' : 'transparent',
+                  border: 'none',
+                  borderRight: '2px solid var(--text-main)',
+                  borderBottom: modalTab === 'simulator' ? 'none' : '2.5px solid var(--text-main)',
+                  padding: '0.85rem 1.5rem',
+                  fontWeight: 800,
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                  color: 'var(--text-main)',
+                  transition: 'all 0.15s'
+                }}
+              >
+                Trình Giả Lập Tương Tác
+              </button>
+              <button
+                onClick={() => setModalTab('report')}
+                style={{
+                  background: modalTab === 'report' ? '#ffffff' : 'transparent',
+                  border: 'none',
+                  borderRight: '2px solid var(--text-main)',
+                  borderBottom: modalTab === 'report' ? 'none' : '2.5px solid var(--text-main)',
+                  padding: '0.85rem 1.5rem',
+                  fontWeight: 800,
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                  color: 'var(--text-main)',
+                  transition: 'all 0.15s'
+                }}
+              >
+                Báo Cáo & Minh Chứng Thực Tế
+              </button>
+              <div style={{ flex: 1, borderBottom: '2.5px solid var(--text-main)' }} />
+            </div>
+
             {/* Modal Body */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
-              {ActiveComponent && <ActiveComponent />}
+              {modalTab === 'simulator' ? (
+                ActiveComponent && <ActiveComponent />
+              ) : (
+                (() => {
+                  const report = TASK_REPORTS[activeTask];
+                  if (!report) return <div style={{ fontWeight: 700 }}>Chưa có báo cáo cho bài này.</div>;
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', color: 'var(--text-main)' }}>
+                      {/* I. MỤC TIÊU */}
+                      <div className="neo-card" style={{ background: '#fcfcfc', border: '2.5px solid var(--text-main)', padding: '1.5rem', boxShadow: '4px 4px 0px var(--text-main)' }}>
+                        <h4 style={{ fontSize: '1.1rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-blue)', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>
+                          I. Mục tiêu nhiệm vụ
+                        </h4>
+                        <p style={{ fontSize: '0.95rem', lineHeight: 1.5, color: 'var(--text-muted)' }}>
+                          {report.objective}
+                        </p>
+                      </div>
+
+                      {/* II. CÁC BƯỚC THỰC HIỆN */}
+                      <div className="neo-card" style={{ background: '#fcfcfc', border: '2.5px solid var(--text-main)', padding: '1.5rem', boxShadow: '4px 4px 0px var(--text-main)' }}>
+                        <h4 style={{ fontSize: '1.1rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-orange)', marginBottom: '0.75rem', fontFamily: 'var(--font-mono)' }}>
+                          II. Các bước thực hiện chi tiết
+                        </h4>
+                        <ol style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                          {report.steps.map((step, idx) => (
+                            <li key={idx}>{step}</li>
+                          ))}
+                        </ol>
+                      </div>
+
+                      {/* SPECIAL TABLES OR DATA IF ANY */}
+                      {report.tableData && (
+                        <div className="neo-card" style={{ background: '#fcfcfc', border: '2.5px solid var(--text-main)', padding: '1.5rem', boxShadow: '4px 4px 0px var(--text-main)', overflowX: 'auto' }}>
+                          <h4 style={{ fontSize: '1.1rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-yellow)', marginBottom: '0.75rem', fontFamily: 'var(--font-mono)' }}>
+                            Bảng đánh giá độ tin cậy của các nguồn thông tin (CRAAP Test)
+                          </h4>
+                          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', minWidth: '600px' }}>
+                            <thead>
+                              <tr style={{ background: '#eaeaea', borderBottom: '2.5px solid var(--text-main)' }}>
+                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: 800, borderRight: '1.5px solid var(--text-main)' }}>Nguồn tài liệu</th>
+                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: 800, borderRight: '1.5px solid var(--text-main)', width: '150px' }}>Loại</th>
+                                <th style={{ padding: '0.75rem', textAlign: 'center', fontWeight: 800, borderRight: '1.5px solid var(--text-main)', width: '80px' }}>Điểm</th>
+                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: 800 }}>Phân tích khoa học</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {report.tableData.map((row, idx) => (
+                                <tr key={idx} style={{ borderBottom: '1.5px solid var(--text-main)' }}>
+                                  <td style={{ padding: '0.75rem', borderRight: '1.5px solid var(--text-main)', fontWeight: 700 }}>{row.name}</td>
+                                  <td style={{ padding: '0.75rem', borderRight: '1.5px solid var(--text-main)' }}>{row.type}</td>
+                                  <td style={{ padding: '0.75rem', borderRight: '1.5px solid var(--text-main)', textAlign: 'center', fontWeight: 800, color: 'var(--color-orange)' }}>{row.score}</td>
+                                  <td style={{ padding: '0.75rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>{row.analysis}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+
+                      {/* III. HÌNH ẢNH MINH CHỨNG THỰC TẾ */}
+                      <div className="neo-card" style={{ background: '#fcfcfc', border: '2.5px solid var(--text-main)', padding: '1.5rem', boxShadow: '4px 4px 0px var(--text-main)' }}>
+                        <h4 style={{ fontSize: '1.1rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-green)', marginBottom: '1rem', fontFamily: 'var(--font-mono)' }}>
+                          III. Hình ảnh minh chứng thực tế
+                        </h4>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                          {report.evidence.map((img, idx) => (
+                            <div 
+                              key={idx} 
+                              className="evidence-item"
+                              style={{ 
+                                border: '1.5px solid var(--text-main)', 
+                                borderRadius: '6px', 
+                                overflow: 'hidden', 
+                                background: '#eaeaea',
+                                boxShadow: '2px 2px 0px var(--text-main)',
+                                display: 'flex',
+                                flexDirection: 'column'
+                              }}
+                            >
+                              <div style={{ overflow: 'hidden', height: '180px', borderBottom: '1.5px solid var(--text-main)' }}>
+                                <img 
+                                  src={img.url} 
+                                  alt={img.caption} 
+                                  style={{ 
+                                    width: '100%', 
+                                    height: '100%', 
+                                    objectFit: 'cover',
+                                    transition: 'transform 0.3s ease',
+                                    cursor: 'pointer'
+                                  }} 
+                                  onClick={() => window.open(img.url, '_blank')}
+                                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                />
+                              </div>
+                              <div style={{ padding: '0.6rem 0.85rem', fontSize: '0.75rem', fontWeight: 700, background: '#ffffff', color: 'var(--text-muted)' }}>
+                                {img.caption}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* IV. KẾT QUẢ ĐẠT ĐƯỢC */}
+                      <div style={{ borderLeft: '4px solid var(--color-green)', paddingLeft: '1rem', marginTop: '0.5rem', marginBottom: '1rem' }}>
+                        <h4 style={{ fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-green)', fontFamily: 'var(--font-mono)' }}>
+                          ✓ Kết quả đạt được
+                        </h4>
+                        <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', marginTop: '0.25rem' }}>
+                          {report.result}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })()
+              )}
             </div>
 
             {/* Modal Footer */}
