@@ -1,16 +1,13 @@
-# React + Vite
+# Dương Nguyên Khánh - Units.gr Student Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Cổng thông tin học tập và báo cáo thực hành của học viên **Dương Nguyên Khánh** (MSSV: `25020210`) lớp K70 Orientation - AI Engineer - UET - VNU.
 
-Currently, two official plugins are available:
+## 🏠 Giao Diện & Tính Năng
+- Giao diện được thiết kế clone 100% theo phong cách Neo-Brutalist của **units.gr**.
+- Tích hợp hiệu ứng chuyển trang dạng lưới Pixel cực kỳ bắt mắt.
+- Bảng báo cáo thực hành 6 nhiệm vụ chi tiết và đầy đủ.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Công Nghệ Sử Dụng
+- React.js (Vite)
+- CSS Vanilla (Neo-Brutalist design tokens)
+- Lucide React Icons
