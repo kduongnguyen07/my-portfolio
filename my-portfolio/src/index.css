@@ -930,3 +930,83 @@ html, body {
   background: linear-gradient(to right, transparent, rgba(0, 71, 255, 0.15) 30%, rgba(0, 71, 255, 0.15) 70%, transparent);
 }
 
+/* ──────── PRINTING & PDF EXPORT ──────── */
+@media print {
+  /* Hide all elements on page */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Target active report content only */
+  .print-report-container, 
+  .print-report-container * {
+    visibility: visible;
+  }
+
+  /* Reset report container size and position */
+  .print-report-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    padding: 10px !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Style cards for high contrast print */
+  .print-report-container .neo-card {
+    background: #ffffff !important;
+    color: #111111 !important;
+    box-shadow: none !important;
+    border: 1.5px solid #111111 !important;
+    padding: 1.25rem !important;
+    margin-bottom: 1.25rem !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Table styling */
+  .print-report-container table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1.5px solid #111111 !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .print-report-container th, 
+  .print-report-container td {
+    border: 1px solid #111111 !important;
+    padding: 0.4rem !important;
+    color: #111111 !important;
+    background: #ffffff !important;
+  }
+
+  /* Hide print buttons */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Grid of evidence in print */
+  .print-report-container div[style*="grid"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* Force 2 columns on paper */
+    gap: 1rem !important;
+  }
+
+  .print-report-container .evidence-item {
+    page-break-inside: avoid !important;
+    box-shadow: none !important;
+    border: 1px solid #111111 !important;
+    background: #ffffff !important;
+  }
+
+  .print-report-container img {
+    max-height: 200px !important;
+    object-fit: contain !important;
+  }
+}
+
+

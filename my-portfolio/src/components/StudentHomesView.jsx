@@ -668,6 +668,32 @@ export default function StudentHomesView() {
               >
                 Báo Cáo & Minh Chứng Thực Tế
               </button>
+              {modalTab === 'report' && (
+                <button
+                  onClick={() => window.print()}
+                  className="no-print"
+                  style={{
+                    background: 'var(--color-blue)',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderLeft: '2.5px solid var(--text-main)',
+                    borderBottom: 'none',
+                    padding: '0.85rem 1.5rem',
+                    fontWeight: 800,
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: 'all 0.15s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = '#0036c4'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'var(--color-blue)'}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+                  Xuất PDF
+                </button>
+              )}
               <div style={{ flex: 1, borderBottom: '2.5px solid var(--text-main)' }} />
             </div>
 
@@ -680,7 +706,7 @@ export default function StudentHomesView() {
                   const report = TASK_REPORTS[activeTask];
                   if (!report) return <div style={{ fontWeight: 700 }}>Chưa có báo cáo cho bài này.</div>;
                   return (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', color: 'var(--text-main)' }}>
+                    <div className="print-report-container" style={{ display: 'flex', flexDirection: 'column', gap: '2rem', color: 'var(--text-main)' }}>
                       {/* I. MỤC TIÊU */}
                       <div className="neo-card" style={{ background: '#fcfcfc', border: '2.5px solid var(--text-main)', padding: '1.5rem', boxShadow: '4px 4px 0px var(--text-main)' }}>
                         <h4 style={{ fontSize: '1.1rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-blue)', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>
